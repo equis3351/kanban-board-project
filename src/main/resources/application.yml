@@ -22,3 +22,10 @@ spring:
           characterEncoding: utf-8
           useUnicode: true
     show-sql: true
+
+manager:
+  key: ${MANAGER_KEY}
+
+jwt:
+  secret:
+    key: ${JWT_SECRET_KEY}
