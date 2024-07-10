@@ -43,7 +43,6 @@ public class UserService {
     public void logout(HttpServletRequest request, User user) {
         String accessToken = request.getHeader("Authorization").substring(7);
 
-        // 1. Access Token 검증
         jwtService.validateToken(accessToken);
 
         User saveUser = userRepository.findByUsername(user.getUsername()).orElseThrow(

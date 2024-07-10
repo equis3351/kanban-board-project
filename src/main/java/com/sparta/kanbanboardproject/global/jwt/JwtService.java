@@ -114,7 +114,7 @@ public class JwtService {
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
     }
 
-    //Token 으로 Authentication 가져오기
+    // Token 으로 Authentication 가져오기
     public Authentication getAuthentication(String token) {
         String username = extractUsername(token);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
