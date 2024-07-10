@@ -2,6 +2,7 @@ package com.sparta.kanbanboardproject.domain.board.entity;
 
 
 import com.sparta.kanbanboardproject.domain.board.dto.BoardRequestDto;
+import com.sparta.kanbanboardproject.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -26,15 +27,20 @@ public class Board {
     private String boardName;
 
     @NotBlank
-    @Column(nullable = false,length = 50)
+    @Column(nullable = false, length = 50)
     private String boardIntro;
 
-    public Board(BoardRequestDto requestDtp) {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Board(BoardRequestDto requestDtp, User user) {
         this.boardName = requestDtp.getBoardName();
         this.boardIntro = requestDtp.getBoardIntro();
+        this.user = user;
     }
 
-    public void UpdateBoard(BoardRequestDto requestDtp){
+    public void UpdateBoard(BoardRequestDto requestDtp) {
         this.boardName = requestDtp.getBoardName();
         this.boardIntro = requestDtp.getBoardIntro();
     }
