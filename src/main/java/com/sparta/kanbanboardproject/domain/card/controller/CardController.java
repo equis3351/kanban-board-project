@@ -4,7 +4,7 @@ import com.sparta.kanbanboardproject.domain.card.dto.CardCreateRequestDto;
 import com.sparta.kanbanboardproject.domain.card.dto.CardResponseDto;
 import com.sparta.kanbanboardproject.domain.card.dto.CardUpdateRequestDto;
 import com.sparta.kanbanboardproject.domain.card.service.CardService;
-import com.sparta.kanbanboardproject.global.dto.HttpResponseDto;
+import com.sparta.kanbanboardproject.global.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,7 +66,7 @@ public class CardController {
         @PathVariable Long progress_id,
         @PathVariable Long card_id) {
 
-        HttpResponseDto responseDto = cardService.deleteCard(userDetails.getUser(), board_id, progress_id, card_id);
+        cardService.deleteCard(userDetails.getUser(), board_id, progress_id, card_id);
 
         return ResponseEntity.status(HttpStatus.OK).body("카드가 삭제되었습니다.");
     }
