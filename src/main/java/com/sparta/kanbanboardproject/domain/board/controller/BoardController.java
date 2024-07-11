@@ -22,12 +22,12 @@ public class BoardController {
 
     @PostMapping("/boards")
     public ResponseEntity<BoardResponseDto> addBoard(
-            @AuthenticationPrincipal UserDetailsImpl userDetails, 
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody BoardRequestDto requestDto) {
-        
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(boardService.addBoard(userDetails.getUser(), requestDto));
-                
+
     }
 
     @GetMapping("/boards")
@@ -58,5 +58,14 @@ public class BoardController {
             @PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).
                 body(boardService.deleteBoard(userDetails.getUser(), id));
+    }
+
+    @PostMapping("/boards/{boardId}/invite/{userId}")
+    public ResponseEntity<String> userInviteToBoard(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long userId,
+            @PathVariable Long boardId) {
+        return ResponseEntity.status(HttpStatus.CREATED).
+                body(boardService.inviteCollaborator(userDetails.getUser(), userId, boardId));
     }
 }
