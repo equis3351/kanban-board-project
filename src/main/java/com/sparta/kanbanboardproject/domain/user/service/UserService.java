@@ -27,9 +27,9 @@ public class UserService {
 
     public void signUp(SignupRequestDto requestDto) {
         UserRoleEnum role = UserRoleEnum.USER;
-        if (requestDto.getIsManager()){
+        if (requestDto.getIsManager()) {
             log.info("isManager true");
-            if (MANAGER_KEY.equals(requestDto.getManagerToken())){
+            if (MANAGER_KEY.equals(requestDto.getManagerToken())) {
                 log.info("managerKey equals");
                 role = UserRoleEnum.MANAGER;
             }
@@ -43,7 +43,6 @@ public class UserService {
     public void logout(HttpServletRequest request, User user) {
         String accessToken = request.getHeader("Authorization").substring(7);
 
-        // 1. Access Token 검증
         jwtService.validateToken(accessToken);
 
         User saveUser = userRepository.findByUsername(user.getUsername()).orElseThrow(
