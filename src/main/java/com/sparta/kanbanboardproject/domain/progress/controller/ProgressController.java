@@ -1,8 +1,10 @@
 package com.sparta.kanbanboardproject.domain.progress.controller;
 
 import com.sparta.kanbanboardproject.domain.progress.dto.ProgressCreateRequestDto;
+import com.sparta.kanbanboardproject.domain.progress.dto.ProgressResponseDto;
 import com.sparta.kanbanboardproject.domain.progress.service.ProgressService;
-import com.sparta.kanbanboardproject.global.dto.HttpResponseDto;
+import com.sparta.kanbanboardproject.global.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,17 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProgressController {
 
     private final ProgressService progressService;
-
+    //String 말고 ResponseDto
     @PostMapping("/{board_id}/progresses")
-    public ResponseEntity<HttpResponseDto> addProgress(@PathVariable Long board_id,
-                                                      @RequestBody ProgressCreateRequestDto requestDto,
-                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        progressService.addProgress(board_id, requestDto, userDetails.getUser());
-        return ResponseEntity.status(HttpStatus.OK).body(
-                HttpResponseDto.builder()
-                        .status(HttpStatus.OK)
-                        .message("댓글이 작성이 완료되었습니다.")
-                        .build()
-        );
+    public ResponseEntity<ProgressResponseDto> addProgress(
+            @PathVariable Long board_id,
+            @Valid @RequestBody ProgressCreateRequestDto requestDto,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(progressService.addProgress(board_id, requestDto, userDetails.getUser()) + "컬럼이 생성 되었습니다.");
     }
 }

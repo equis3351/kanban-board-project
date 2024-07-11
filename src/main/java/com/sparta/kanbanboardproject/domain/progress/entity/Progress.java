@@ -1,15 +1,17 @@
 package com.sparta.kanbanboardproject.domain.progress.entity;
 
-import com.sparta.kanbanboardproject.domain.board.entity.Board;
-import com.sparta.kanbanboardproject.domain.card.entity.Card;
+import com.sparta.kanbanboardproject.domain.progress.dto.ProgressCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
 @Getter
-@Table(name = "Progresses")
+@NoArgsConstructor
+@Table(name = "progresses")
 public class Progress {
 
     @Id
@@ -20,6 +22,7 @@ public class Progress {
     @Column(name = "status_name", nullable = false)
     private String statusName;
 
+    @Setter
     @Column(name = "sequence", nullable = false)
     private Long sequenceNumber;
 
@@ -29,4 +32,9 @@ public class Progress {
 
     @OneToMany(mappedBy = "progress", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Card> cardList;
+
+    public Progress(ProgressCreateRequestDto requestDto, Board board) {
+        this.statusName = requestDto.getStatusName();
+        this.board = board;
+    }
 }
