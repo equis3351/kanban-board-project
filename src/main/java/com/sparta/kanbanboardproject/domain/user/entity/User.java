@@ -4,13 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Getter
-@EntityListeners(AuditingEntityListener.class)
-@Table(name = "users")
 @NoArgsConstructor
+@Table(name = "users")
 public class User {
 
     @Id
