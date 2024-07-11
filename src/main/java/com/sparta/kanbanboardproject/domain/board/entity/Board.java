@@ -1,14 +1,11 @@
 package com.sparta.kanbanboardproject.domain.board.entity;
 
-
 import com.sparta.kanbanboardproject.domain.board.dto.BoardRequestDto;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
