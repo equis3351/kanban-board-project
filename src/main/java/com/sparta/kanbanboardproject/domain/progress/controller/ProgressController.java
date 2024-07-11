@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProgressController {
 
     private final ProgressService progressService;
-    //String 말고 ResponseDto
+
     @PostMapping("/{board_id}/progresses")
     public ResponseEntity<ProgressResponseDto> addProgress(
             @PathVariable Long board_id,
@@ -27,6 +27,6 @@ public class ProgressController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(progressService.addProgress(board_id, requestDto, userDetails.getUser()) + "컬럼이 생성 되었습니다.");
+                .body(progressService.addProgress(board_id, requestDto, userDetails.getUser()));
     }
 }
