@@ -10,12 +10,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "board")
+@Getter
+@NoArgsConstructor
+@Table(name = "boards")
 public class Board {
 
     @Id
