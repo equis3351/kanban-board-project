@@ -7,15 +7,18 @@ import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.card.repository.CardRepository;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import com.sparta.kanbanboardproject.domain.progress.repository.ProgressRepository;
+import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.Worker;
+import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
 import com.sparta.kanbanboardproject.domain.user.repository.WorkerRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +29,7 @@ public class CardService {
     private final BoardRepository boardRepository;
     private final ProgressRepository progressRepository;
     private final WorkerRepository workerRepository;
+    private final CollaboratorRepository collaboratorRepository;
 
     // 카드 목록 조회
     public List<Card> getAllByBoard(Long boardId) {
@@ -37,11 +41,13 @@ public class CardService {
     // 카드 작업자별 조회
     public List<Card> getAllByBoardAndWorker(Long boardId, Long workerId) {
         Board board = getBoardById(boardId);
-        Worker worker = workerRepository.findById(workerId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Worker"));
 
-//        return cardRepository.findAllByBoardAndWorker(board, worker);
-        return null;
+        List<Worker> workers = workerRepository.findAllById(workerId);
+        return workers.stream()
+            .map(Worker::getCard)
+            .filter(card -> card.getBoard().equals(board))
+            .distinct()
+            .collect(Collectors.toList());
     }
 
     // 카드 상태별 조회
@@ -68,46 +74,49 @@ public class CardService {
     }
 
     // 카드 제목 수정
+    @Transactional
     public CardResponseDto updateCardTitle(Long boardId, Long progressId, Long cardId, String title) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 
         card.updateTitle(title);
-        cardRepository.save(card);
 
         return new CardResponseDto(card);
     }
 
     // 카드 내용 수정
+    @Transactional
     public CardResponseDto updateCardContent(Long boardId, Long progressId, Long cardId, String content) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 
         card.updateContent(content);
-        cardRepository.save(card);
 
         return new CardResponseDto(card);
     }
 
     // 카드 마감일 수정
+    @Transactional
     public CardResponseDto updateCardDueDate(Long boardId, Long progressId, Long cardId, Date dueDate) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 
         card.updateDueDate(dueDate);
-        cardRepository.save(card);
 
         return new CardResponseDto(card);
     }
 
     // 카드 작업자 지정
+    @Transactional
     public CardResponseDto updateCardWorker(Long boardId, Long progressId, Long cardId, Long workerId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+        Collaborator collaborator = collaboratorRepository.findById(workerId).orElseThrow(
+            () -> new IllegalArgumentException("Not Found Collaborator"));
 
-        // 작업자 지정 - X
-        cardRepository.save(card);
+        card.updateWorker(card, collaborator);
 
         return new CardResponseDto(card);
     }
 
     // 카드 삭제
+    @Transactional
     public void deleteCard(Long boardId, Long progressId, Long cardId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 
@@ -115,7 +124,7 @@ public class CardService {
     }
 
     // 카드 순서 이동
-    public CardResponseDto updateCardSequence(Long boardId, Long progressId, Long cardId, Long sequence, Long updateProgressId) {
+    public CardResponseDto updateCardSequence(Long boardId, Long progressId, Long cardId, Long prevSeq, Long nextSeq, Long updateProgressId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 
         // 순서 지정 - X

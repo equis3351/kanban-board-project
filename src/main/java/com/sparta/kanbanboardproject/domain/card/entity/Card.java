@@ -2,14 +2,15 @@ package com.sparta.kanbanboardproject.domain.card.entity;
 
 import com.sparta.kanbanboardproject.domain.board.entity.Board;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
+import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
+import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -40,6 +41,9 @@ public class Card {
     @JoinColumn(name = "progress_id")
     private Progress progress;
 
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Worker> workers;
+
     @Builder
     public Card(String title, String content, Date dueDate, Long sequence, Board board, Progress progress) {
         this.title = title;
@@ -62,8 +66,12 @@ public class Card {
         this.dueDate = dueDate;
     }
 
+    public void updateWorker(Card card, Collaborator collaborator) {
+        Worker worker = new Worker(card, collaborator);
+        workers.add(worker);
+    }
+
     public void updateProgress(Progress progress) {
         this.progress = progress;
     }
-
 }

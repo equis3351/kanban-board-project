@@ -8,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -126,11 +125,12 @@ public class CardController {
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestParam Long sequence,
+        @RequestParam Long prevSeq,
+        @RequestParam Long nextSeq,
         @RequestParam(required = false) Long updateProgressId) {
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(cardService.updateCardSequence(board_id, progress_id, card_id, sequence, updateProgressId));
+            .body(cardService.updateCardSequence(board_id, progress_id, card_id, prevSeq, nextSeq, updateProgressId));
     }
 
     // 카드 상세 조회

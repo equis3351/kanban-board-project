@@ -12,6 +12,5 @@ public interface CardRepository extends JpaRepository<Card, Long> {
     Optional<Card> findByBoardIdAndProgressIdAndId(Long boardId, Long progressId, Long id);
 
     List<Card> findAllByBoard(Board board);
-//    List<Card> findAllByBoardAndWorker(Board board, Worker worker);
     List<Card> findAllByBoardAndProgress(Board board, Progress progress);
 }

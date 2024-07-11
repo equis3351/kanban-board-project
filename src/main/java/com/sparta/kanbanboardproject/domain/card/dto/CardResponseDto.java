@@ -1,10 +1,11 @@
 package com.sparta.kanbanboardproject.domain.card.dto;
 
 import com.sparta.kanbanboardproject.domain.card.entity.Card;
+import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 public class CardResponseDto {
@@ -13,6 +14,7 @@ public class CardResponseDto {
     private final String content;
     private final Date dueDate;
     private final Long sequence;
+    private final List<Worker> workers;
 
     public CardResponseDto(Card card) {
         this.id = card.getId();
@@ -20,6 +22,7 @@ public class CardResponseDto {
         this.content = card.getContent();
         this.dueDate = card.getDueDate();
         this.sequence = card.getSequence();
+        this.workers = card.getWorkers();
     }
 
 }
