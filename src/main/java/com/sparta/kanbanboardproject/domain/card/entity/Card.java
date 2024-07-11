@@ -14,7 +14,6 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-@DynamicUpdate
 @Table(name = "cards")
 public class Card {
 
