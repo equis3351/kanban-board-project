@@ -24,7 +24,6 @@ public class Progress {
     @Column(name = "status_name", nullable = false)
     private String statusName;
 
-    @Setter
     @Column(name = "sequence", nullable = false)
     private Long sequenceNumber;
 
@@ -38,5 +37,9 @@ public class Progress {
     public Progress(ProgressCreateRequestDto requestDto, Board board) {
         this.statusName = requestDto.getStatusName();
         this.board = board;
+    }
+
+    public void updateSequence(Long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 }

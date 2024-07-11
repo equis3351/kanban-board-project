@@ -8,5 +8,11 @@ import java.util.List;
 
 public interface ProgressRepository extends JpaRepository<Progress, Long> {
     Long countByBoardId(Long boardId);
+
     List<Progress> findByBoardIdAndSequenceNumberGreaterThan(Long boardId, Long sequenceNum);
+
+    List<Progress> findByBoardId(Long boardId);
+
+    Progress findByBoardIdAndSequenceNumber(Long boardId, Long sequenceNum);
+
 }
