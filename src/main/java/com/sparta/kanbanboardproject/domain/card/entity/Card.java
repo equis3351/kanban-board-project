@@ -27,6 +27,7 @@ public class Card {
     private String content;
 
     @Column(name = "due_date")
+    @Temporal(TemporalType.DATE)
     private LocalDateTime dueDate;
 
     private Long sequence;
@@ -46,6 +47,22 @@ public class Card {
         this.dueDate = dueDate;
         this.sequence = sequence;
         this.board = board;
+        this.progress = progress;
+    }
+
+    public void updateTitle(String title) {
+        this.title = title;
+    }
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
+
+    public void updateDueDate(LocalDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public void updateProgress(Progress progress) {
         this.progress = progress;
     }
 

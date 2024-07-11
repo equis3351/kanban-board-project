@@ -1,15 +1,11 @@
 package com.sparta.kanbanboardproject.domain.board.entity;
 
-
 import com.sparta.kanbanboardproject.domain.board.dto.BoardRequestDto;
-import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -32,9 +28,6 @@ public class Board {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cards;
 
     public Board(BoardRequestDto requestDtp, User user) {
         this.boardName = requestDtp.getBoardName();
