@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.ArrayList;
 import java.util.Collection;
 
-
 @Slf4j
 public class UserDetailsImpl implements UserDetails {
 
