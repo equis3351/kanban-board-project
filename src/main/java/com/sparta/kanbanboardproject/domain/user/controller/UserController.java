@@ -23,17 +23,20 @@ public class UserController {
 
     @PostMapping("/users/signup")
     public ResponseEntity<String> signUp(@Valid @RequestBody SignupRequestDto requestDto) {
-        if (requestDto.getIsManager()) log.info("true");
-        if (!requestDto.getIsManager()) log.info("false");
+
         userService.signUp(requestDto);
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("회원가입 성공!");
     }
 
     @PostMapping("/users/logout")
-    public ResponseEntity<String> logout(HttpServletRequest request,
-                                         @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<String> logout(
+            HttpServletRequest request,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
         userService.logout(request, userDetails.getUser());
+
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(userDetails.getUser() + " 아이디가 로그아웃 되었습니다.");
     }
