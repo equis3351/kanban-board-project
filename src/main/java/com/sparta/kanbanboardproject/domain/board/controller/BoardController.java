@@ -21,27 +21,42 @@ public class BoardController {
     }
 
     @PostMapping("/boards")
-    public BoardResponseDto addBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @RequestBody BoardRequestDto requestDto) {
-        return boardService.addBoard(userDetails.getUser(), requestDto);
+    public ResponseEntity<BoardResponseDto> addBoard(
+            @AuthenticationPrincipal UserDetailsImpl userDetails, 
+            @RequestBody BoardRequestDto requestDto) {
+        
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(boardService.addBoard(userDetails.getUser(), requestDto));
+                
     }
 
     @GetMapping("/boards")
-    public List<BoardResponseDto> getAllBoard() {
-        return boardService.getAllBoard();
+    public ResponseEntity<List<BoardResponseDto>> getAllBoard() {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(boardService.getAllBoard());
     }
 
     @GetMapping("/boards/{id}")
-    public BoardResponseDto getBoard(@PathVariable Long id) {
-        return boardService.getBoard(id);
+    public ResponseEntity<BoardResponseDto> getBoard(
+            @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(boardService.getBoard(id));
     }
 
     @PostMapping("/boards/{id}")
-    public BoardResponseDto updateBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id, @RequestBody BoardRequestDto requestDto) {
-        return boardService.updateBoard(userDetails.getUser(), id, requestDto);
+    public ResponseEntity<BoardResponseDto> updateBoard(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long id,
+            @RequestBody BoardRequestDto requestDto) {
+        return ResponseEntity.status(HttpStatus.OK).
+                body(boardService.updateBoard(userDetails.getUser(), id, requestDto));
     }
 
     @DeleteMapping("/boards/{id}")
-    public BoardResponseDto updateBoard(@AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long id) {
-        return boardService.deleteBoard(userDetails.getUser(), id);
+    public ResponseEntity<BoardResponseDto> updateBoard(
+            @AuthenticationPrincipal UserDetailsImpl userDetails,
+            @PathVariable Long id) {
+        return ResponseEntity.status(HttpStatus.OK).
+                body(boardService.deleteBoard(userDetails.getUser(), id));
     }
 }

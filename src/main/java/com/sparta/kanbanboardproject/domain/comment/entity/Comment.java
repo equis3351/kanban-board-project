@@ -27,10 +27,10 @@ public class Comment {
     @Column(nullable = false, length = 50)
     private String comment;
 
-//    @CreatedDate
-//    @Column(updatable = false)
-//    @Temporal(TemporalType.TIMESTAMP)
-//    private LocalDateTime createdAt;
+    @CreatedDate
+    @Column(updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private LocalDateTime createdAt;
 
     public Comment(CommentRequestDto commentRequestDto) {
         this.comment=commentRequestDto.getComment();
