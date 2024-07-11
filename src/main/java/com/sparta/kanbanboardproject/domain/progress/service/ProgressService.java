@@ -70,4 +70,8 @@ public class ProgressService {
                 () -> new IllegalArgumentException("컬럼이 존재하지 않습니다.")
         );
     }
+
+    public ProgressResponseDto moveProgress(Long boardId, Long progressId, User user) {
+        return null;
+    }
 }
