@@ -1,4 +1,8 @@
 package com.sparta.kanbanboardproject.domain.comment.repository;
 
-public interface CommentRepository {
+import com.sparta.kanbanboardproject.domain.comment.entity.Comment;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CommentRepository extends JpaRepository<Comment,Long> {
+
 }

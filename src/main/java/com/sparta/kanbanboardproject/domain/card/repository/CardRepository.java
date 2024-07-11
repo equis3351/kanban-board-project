@@ -1,4 +1,7 @@
 package com.sparta.kanbanboardproject.domain.card.repository;
 
-public interface CardRepository {
+import com.sparta.kanbanboardproject.domain.card.entity.Card;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CardRepository extends JpaRepository<Card, Long> {
 }
