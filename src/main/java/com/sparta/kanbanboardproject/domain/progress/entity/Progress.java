@@ -1,5 +1,7 @@
 package com.sparta.kanbanboardproject.domain.progress.entity;
 
+import com.sparta.kanbanboardproject.domain.board.entity.Board;
+import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.progress.dto.ProgressCreateRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
