@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -87,7 +88,7 @@ public class CardService {
     }
 
     // 카드 마감일 수정
-    public CardResponseDto updateCardDueDate(Long boardId, Long progressId, Long cardId, LocalDateTime dueDate) {
+    public CardResponseDto updateCardDueDate(Long boardId, Long progressId, Long cardId, Date dueDate) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 
         card.updateDueDate(dueDate);

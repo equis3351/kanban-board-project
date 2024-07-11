@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,7 @@ public class CardController {
     }
 
     // 카드 작업자별 조회
-    @GetMapping("/cards/{worker_id}")
+    @GetMapping("/cards/workers/{worker_id}")
     public ResponseEntity<List<Card>> getCardListByWorker(
         @PathVariable Long board_id,
         @PathVariable Long worker_id) {
@@ -38,7 +39,7 @@ public class CardController {
     }
 
     // 카드 상태별 조회
-    @GetMapping("/cards/{progress_id}")
+    @GetMapping("/cards/progresses/{progress_id}")
     public ResponseEntity<List<Card>> getCardListByProgress(
         @PathVariable Long board_id,
         @PathVariable Long progress_id) {
@@ -88,7 +89,7 @@ public class CardController {
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestParam LocalDateTime dueDate) {
+        @RequestParam Date dueDate) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(cardService.updateCardDueDate(board_id, progress_id, card_id, dueDate));

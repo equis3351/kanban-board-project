@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -28,7 +29,7 @@ public class Card {
 
     @Column(name = "due_date")
     @Temporal(TemporalType.DATE)
-    private LocalDateTime dueDate;
+    private Date dueDate;
 
     private Long sequence;
 
@@ -41,7 +42,7 @@ public class Card {
     private Progress progress;
 
     @Builder
-    public Card(String title, String content, LocalDateTime dueDate, Long sequence, Board board, Progress progress) {
+    public Card(String title, String content, Date dueDate, Long sequence, Board board, Progress progress) {
         this.title = title;
         this.content = content;
         this.dueDate = dueDate;
@@ -58,7 +59,7 @@ public class Card {
         this.content = content;
     }
 
-    public void updateDueDate(LocalDateTime dueDate) {
+    public void updateDueDate(Date dueDate) {
         this.dueDate = dueDate;
     }
 
