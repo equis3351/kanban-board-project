@@ -31,7 +31,8 @@ public class Card {
     @Temporal(TemporalType.DATE)
     private Date dueDate;
 
-    private Long sequence;
+    @Column(name = "sequence", nullable = false)
+    private Long sequenceNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -42,14 +43,13 @@ public class Card {
     private Progress progress;
 
     @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Worker> workers;
+    private List<Worker> workerList;
 
     @Builder
-    public Card(String title, String content, Date dueDate, Long sequence, Board board, Progress progress) {
+    public Card(String title, String content, Date dueDate, Board board, Progress progress) {
         this.title = title;
         this.content = content;
         this.dueDate = dueDate;
-        this.sequence = sequence;
         this.board = board;
         this.progress = progress;
     }
@@ -68,10 +68,15 @@ public class Card {
 
     public void updateWorker(Card card, Collaborator collaborator) {
         Worker worker = new Worker(card, collaborator);
-        workers.add(worker);
+        workerList.add(worker);
+    }
+
+    public void updateSequence(Long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 
     public void updateProgress(Progress progress) {
         this.progress = progress;
     }
+
 }

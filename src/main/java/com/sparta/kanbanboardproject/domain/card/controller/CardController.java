@@ -29,7 +29,7 @@ public class CardController {
 
     // 카드 작업자별 조회
     @GetMapping("/cards/workers/{worker_id}")
-    public ResponseEntity<List<Card>> getCardListByWorker(
+    public ResponseEntity<List<Card>> getCardListByWorkerList(
         @PathVariable Long board_id,
         @PathVariable Long worker_id) {
 
@@ -108,7 +108,7 @@ public class CardController {
 
     // 카드 삭제
     @DeleteMapping("/progresses/{progress_id}/cards/{card_id}")
-    public ResponseEntity<String> updateCard(
+    public ResponseEntity<String> deleteCard(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id) {
@@ -119,18 +119,28 @@ public class CardController {
             .body("카드가 삭제되었습니다.");
     }
 
-    // 카드 순서 이동
-    @PutMapping("/progresses/{progress_id}/cards/{card_id}/sequence")
-    public ResponseEntity<CardResponseDto> updateCardSequence(
+    // 카드 상태 변경
+    @PutMapping("/progresses/{progress_id}/cards/{card_id}/status")
+    public ResponseEntity<CardResponseDto> updateCardStatus(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestParam Long prevSeq,
-        @RequestParam Long nextSeq,
-        @RequestParam(required = false) Long updateProgressId) {
+        @RequestParam Long updateProgressId) {
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(cardService.updateCardSequence(board_id, progress_id, card_id, prevSeq, nextSeq, updateProgressId));
+            .body(cardService.updateCardStatus(board_id, progress_id, card_id, updateProgressId));
+    }
+
+    // 카드 순서 이동
+    @PutMapping("/progresses/{progress_id}/cards/{card_id}/sequence")
+    public ResponseEntity<CardResponseDto> moveCard(
+        @PathVariable Long board_id,
+        @PathVariable Long progress_id,
+        @PathVariable Long card_id,
+        @RequestParam Long sequenceNum) {
+
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(cardService.moveCard(board_id, progress_id, card_id, sequenceNum));
     }
 
     // 카드 상세 조회

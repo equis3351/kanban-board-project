@@ -68,6 +68,9 @@ public class CardService {
             .board(board)
             .progress(progress)
             .build();
+
+        Long countCards = cardRepository.countByProgressId(progressId);
+        card.updateSequence(countCards + 1);
         cardRepository.save(card);
 
         return new CardResponseDto(card);
@@ -116,25 +119,55 @@ public class CardService {
     }
 
     // 카드 삭제
-    @Transactional
     public void deleteCard(Long boardId, Long progressId, Long cardId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 
         cardRepository.delete(card);
+
+        List<Card> cardList = cardRepository.findByProgressIdAndSequenceNumberGreaterThan(progressId, card.getSequenceNumber());
+        for (Card cd : cardList) {
+            cd.updateSequence(cd.getSequenceNumber() - 1);
+        }
+        
+        cardRepository.saveAll(cardList);
     }
 
-    // 카드 순서 이동
-    public CardResponseDto updateCardSequence(Long boardId, Long progressId, Long cardId, Long prevSeq, Long nextSeq, Long updateProgressId) {
+    // 카드 상태 변경
+    public CardResponseDto updateCardStatus(Long boardId, Long progressId, Long cardId, Long updateProgressId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+        Progress progress = getProgressById(updateProgressId);
+        
+        card.updateProgress(progress);
 
-        // 순서 지정 - X
-        if (updateProgressId != null) {
-            Progress progress = getProgressById(updateProgressId);
-            card.updateProgress(progress);
+        List<Card> cardList = cardRepository.findByProgressIdAndSequenceNumberGreaterThan(progressId, card.getSequenceNumber());
+        for (Card cd : cardList) {
+            cd.updateSequence(cd.getSequenceNumber() - 1);
         }
+
+        Long countCards = cardRepository.countByProgressId(progressId);
+        card.updateSequence(countCards + 1);
         cardRepository.save(card);
 
         return new CardResponseDto(card);
+    }
+
+    // 카드 순서 이동
+    public CardResponseDto moveCard(Long boardId, Long progressId, Long cardId, Long sequenceNum) {
+        Card changedCard = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+
+        Long currentSequenceNumber = changedCard.getSequenceNumber();
+
+        Card changingCard = cardRepository.findByProgressIdAndSequenceNumber(progressId, sequenceNum).orElseThrow(
+            () -> new IllegalArgumentException("바꾸려는 컬럼이 존재하지 않습니다.")
+        );
+
+        changingCard.updateSequence(currentSequenceNumber);
+        cardRepository.save(changingCard);
+
+        changedCard.updateSequence(sequenceNum);
+        cardRepository.save(changedCard);
+
+        return new CardResponseDto(changedCard);
     }
 
     // 카드 상세 조회

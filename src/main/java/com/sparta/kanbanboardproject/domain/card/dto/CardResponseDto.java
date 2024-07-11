@@ -13,7 +13,7 @@ public class CardResponseDto {
     private final String title;
     private final String content;
     private final Date dueDate;
-    private final Long sequence;
+    private final Long sequenceNumber;
     private final List<Worker> workers;
 
     public CardResponseDto(Card card) {
@@ -21,8 +21,8 @@ public class CardResponseDto {
         this.title = card.getTitle();
         this.content = card.getContent();
         this.dueDate = card.getDueDate();
-        this.sequence = card.getSequence();
-        this.workers = card.getWorkers();
+        this.sequenceNumber = card.getSequenceNumber();
+        this.workers = card.getWorkerList();
     }
 
 }
