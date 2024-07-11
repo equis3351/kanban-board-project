@@ -31,8 +31,8 @@ public class ProgressService {
         }
 
         List<Progress> existingProgresses = progressRepository.findByBoardId(boardId);
-        for (Progress progress : existingProgresses) {
-            if (progress.getStatusName().equals(requestDto.getStatusName())) {
+        for (Progress pr : existingProgresses) {
+            if (pr.getStatusName().equals(requestDto.getStatusName())) {
                 throw new IllegalArgumentException("상태가 같은 컬럼을 또 생성할 수 없습니다.");
             }
         }
@@ -41,7 +41,7 @@ public class ProgressService {
 
         Long countColumns = progressRepository.countByBoardId(boardId);
 
-        progress.setSequenceNumber(countColumns + 1);
+        progress.updateSequence(countColumns + 1);
 
         progressRepository.save(progress);
 
@@ -60,8 +60,8 @@ public class ProgressService {
         progressRepository.delete(progress);
 
         List<Progress> progressList = progressRepository.findByBoardIdAndSequenceNumberGreaterThan(boardId, progress.getSequenceNumber());
-        for (Progress p : progressList) {
-            p.setSequenceNumber(p.getSequenceNumber() - 1);
+        for (Progress pr : progressList) {
+            pr.updateSequence(pr.getSequenceNumber() - 1);
         }
 
         progressRepository.saveAll(progressList);
@@ -70,8 +70,9 @@ public class ProgressService {
     @Transactional
     public ProgressResponseDto moveProgress(Long boardId, Long progressId, ProgressMoveRequestDto requestDto, User user) {
         Board board = existingBoard(boardId);
+
         if (!board.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("보드의 주인만 컬럼을 삭제 할 수 있습니다.");
+            throw new IllegalArgumentException("보드의 주인만 컬럼을 이동할 수 있습니다.");
         }
 
         Progress changedProgress = existingProgress(progressId);
@@ -79,32 +80,20 @@ public class ProgressService {
         Long newSequenceNumber = requestDto.getSequenceNumber();
         Long currentSequenceNumber = changedProgress.getSequenceNumber();
 
-        // 2번 카드 -> 4번 카드로 옮길 때
-        if (newSequenceNumber < currentSequenceNumber) {
-            // 2번째 카드
-            Progress changingProgress = progressRepository.findByBoardIdAndSequenceNumber(boardId, newSequenceNumber);
-            // 2번째 카드 4번째 카드로 변경
-            changingProgress.setSequenceNumber(currentSequenceNumber);
-            progressRepository.save(changingProgress);
-            // 4번째 카드 2번째 카드로 변경
-            changedProgress.setSequenceNumber(newSequenceNumber);
-            progressRepository.save(changedProgress);
+        Progress changingProgress = progressRepository.findByBoardIdAndSequenceNumber(boardId, newSequenceNumber);
 
-            // 4번 카드 -> 2번 카드로 옮길 때
-        } else if (newSequenceNumber > currentSequenceNumber) {
-            // 4번째 컬럼
-            Progress changingProgress = progressRepository.findByBoardIdAndSequenceNumber(boardId, newSequenceNumber);
-            // 4번째 컬럼 2번째 컬럼으로 변경
-            changingProgress.setSequenceNumber(currentSequenceNumber);
-            progressRepository.save(changingProgress);
-            // 2번째 컬럼 4번째 컬럼으로 변경
-            changedProgress.setSequenceNumber(newSequenceNumber);
-            progressRepository.save(changedProgress);
+        if (changingProgress == null) {
+            throw new IllegalArgumentException("바꾸려는 컬럼이 존재하지 않습니다.");
         }
+
+        changingProgress.updateSequence(currentSequenceNumber);
+        progressRepository.save(changingProgress);
+
+        changedProgress.updateSequence(newSequenceNumber);
+        progressRepository.save(changedProgress);
 
         return new ProgressResponseDto(changedProgress);
     }
-
 
 
     public Board existingBoard(Long boardId) {
