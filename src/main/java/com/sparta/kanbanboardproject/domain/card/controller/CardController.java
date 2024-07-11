@@ -70,7 +70,7 @@ public class CardController {
     }
 
     // 카드 순서 이동
-    @PutMapping("/{progress_id}/cards/{card_id}")
+    @PutMapping("/{progress_id}/cards/sequence/{card_id}")
     public ResponseEntity<CardResponseDto> updateCardSequence(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long board_id,

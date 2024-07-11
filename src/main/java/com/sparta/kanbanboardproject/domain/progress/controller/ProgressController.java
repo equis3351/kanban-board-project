@@ -9,17 +9,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 public class ProgressController {
 
     private final ProgressService progressService;
-    //String 말고 ResponseDto
+
     @PostMapping("/{board_id}/progresses")
     public ResponseEntity<ProgressResponseDto> addProgress(
             @PathVariable Long board_id,
@@ -27,6 +24,17 @@ public class ProgressController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(progressService.addProgress(board_id, requestDto, userDetails.getUser()) + "컬럼이 생성 되었습니다.");
+                .body(progressService.addProgress(board_id, requestDto, userDetails.getUser()));
+    }
+
+    @DeleteMapping("/{board_id}/progresses/{progress_id}")
+    public ResponseEntity<String> deleteProgress(
+            @PathVariable Long board_id,
+            @PathVariable Long progress_id,
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+
+        progressService.deleteProgress(board_id, progress_id, userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK)
+                .body("컬럼이 삭제 되었습니다.");
     }
 }
