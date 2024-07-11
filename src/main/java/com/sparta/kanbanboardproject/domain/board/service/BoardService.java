@@ -22,7 +22,7 @@ public class BoardService {
 
     public BoardResponseDto addBoard(User user, BoardRequestDto requestDto) {
 
-        if (!(user.getRole().equals(UserRoleEnum.MANAGER))) {
+        if (!user.getRole().equals(UserRoleEnum.MANAGER)) {
             throw new IllegalArgumentException("매니저만 보드 생성이 가능합니다");
         }
 
@@ -50,8 +50,8 @@ public class BoardService {
             throw new IllegalArgumentException("매니저만 보드 수정이 가능합니다");
         } else if (!(user.getId().equals(board.getUser().getId()))) {
             throw new IllegalArgumentException("userId가 일치하지 않습니다");
-        }
-        board.UpdateBoard(requestDto);
+        }//메소드로 뺀다
+        board.updateBoard(requestDto);
 
         boardRepository.save(board);
 

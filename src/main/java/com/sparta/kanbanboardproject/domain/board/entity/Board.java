@@ -40,7 +40,7 @@ public class Board {
         this.user = user;
     }
 
-    public void UpdateBoard(BoardRequestDto requestDtp) {
+    public void updateBoard(BoardRequestDto requestDtp) {
         this.boardName = requestDtp.getBoardName();
         this.boardIntro = requestDtp.getBoardIntro();
     }

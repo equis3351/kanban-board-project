@@ -16,7 +16,7 @@ public class CommentService {
         this.commentRepository = commentRepository;
     }
 
-    public CommentResponseDto addComment(User user, CommentRequestDto commentRequestDto){
+    public CommentResponseDto addComment(User user, CommentRequestDto commentRequestDto) {
         Comment comment=new Comment(commentRequestDto);
 
         commentRepository.save(comment);
@@ -24,7 +24,7 @@ public class CommentService {
         return new CommentResponseDto(comment);
     }
 
-    public CommentResponseDto getAllComment(){
-
-    }
+//    public CommentResponseDto getAllComment() {
+//
+//    }
 }
