@@ -26,9 +26,8 @@ public class CardController {
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long board_id) {
 
-        List<CardResponseDto> responseDtoList = cardService.getAllByBoard(userDetails.getUser(), board_id);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(cardService.getAllByBoard(userDetails.getUser(), board_id));
     }
 
     // 카드 생성
@@ -39,9 +38,8 @@ public class CardController {
         @PathVariable Long progress_id,
         @RequestBody CardCreateRequestDto requestDto) {
 
-        CardResponseDto responseDto = cardService.createCard(userDetails.getUser(), board_id, progress_id, requestDto);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+            .body(cardService.createCard(userDetails.getUser(), board_id, progress_id, requestDto));
     }
 
     // 카드 수정
@@ -53,9 +51,8 @@ public class CardController {
         @PathVariable Long card_id,
         @RequestBody CardUpdateRequestDto requestDto) {
 
-        CardResponseDto responseDto = cardService.updateCard(userDetails.getUser(), board_id, progress_id, card_id, requestDto);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(cardService.updateCard(userDetails.getUser(), board_id, progress_id, card_id, requestDto));
     }
 
     // 카드 삭제
@@ -68,7 +65,8 @@ public class CardController {
 
         cardService.deleteCard(userDetails.getUser(), board_id, progress_id, card_id);
 
-        return ResponseEntity.status(HttpStatus.OK).body("카드가 삭제되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK)
+            .body("카드가 삭제되었습니다.");
     }
 
     // 카드 순서 이동
@@ -80,9 +78,8 @@ public class CardController {
         @PathVariable Long card_id,
         @RequestParam Long sequence) {
 
-        CardResponseDto responseDto = cardService.updateCardSequence(userDetails.getUser(), board_id, progress_id, card_id, sequence);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(cardService.updateCardSequence(userDetails.getUser(), board_id, progress_id, card_id, sequence));
     }
 
     // 카드 상세 조회
@@ -93,8 +90,7 @@ public class CardController {
         @PathVariable Long progress_id,
         @PathVariable Long card_id) {
 
-        CardResponseDto responseDto = cardService.getCardById(userDetails.getUser(), board_id, progress_id, card_id);
-
-        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(cardService.getCardById(userDetails.getUser(), board_id, progress_id, card_id));
     }
 }
