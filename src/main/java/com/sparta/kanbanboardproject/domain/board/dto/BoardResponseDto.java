@@ -14,8 +14,8 @@ public class BoardResponseDto {
 
     public BoardResponseDto(Board board) {
         this.id = board.getId();
-        this.boardName = getBoardName();
-        this.boardIntro = getBoardIntro();
+        this.boardName = board.getBoardName();
+        this.boardIntro = board.getBoardIntro();
     }
 
 }
