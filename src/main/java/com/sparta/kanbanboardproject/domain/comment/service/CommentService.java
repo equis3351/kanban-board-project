@@ -10,6 +10,7 @@ import com.sparta.kanbanboardproject.domain.user.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -33,7 +34,7 @@ public class CommentService {
     }
 
     public List<CommentResponseDto> getAllComment() {
-        List<Comment> comment=commentRepository.findAll(Sort.by(Sort.Order.asc("createdAt")));
+        List<Comment> comment=commentRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
 
         return comment.stream().map(CommentResponseDto::new).toList();
     }

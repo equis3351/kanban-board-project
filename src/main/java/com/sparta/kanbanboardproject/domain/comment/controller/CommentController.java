@@ -30,9 +30,8 @@ public class CommentController {
                 .body(commentService.addComment(userDetails.getUser(), cardId, requestDto));
     }
 
-    @GetMapping("/cards/{cardId}/comments")
-    public ResponseEntity<List<CommentResponseDto>> getAllComment(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    @GetMapping("/cards/comments")
+    public ResponseEntity<List<CommentResponseDto>> getAllComment() {
         return ResponseEntity.status(HttpStatus.OK).
                 body(commentService.getAllComment());
     }
