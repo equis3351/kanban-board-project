@@ -25,7 +25,7 @@ public class BoardController {
         return boardService.addBoard(userDetails.getUser(), requestDto);
     }
 
-    @GetMapping("/boards/{id}")
+    @GetMapping("/boards")
     public List<BoardResponseDto> getAllBoard() {
         return boardService.getAllBoard();
     }
