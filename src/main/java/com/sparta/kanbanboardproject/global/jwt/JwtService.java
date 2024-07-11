@@ -50,24 +50,24 @@ public class JwtService {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
-    public String createToken(String userId) {
+    public String createToken(String username) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(userId)
+                        .setSubject(username)
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(signatureAlgorithm, key)
                         .compact();
     }
 
-    public String createRefreshToken(String userId) {
+    public String createRefreshToken(String username) {
         Date date = new Date();
 
         return BEARER_PREFIX +
                 Jwts.builder()
-                        .setSubject(userId)
+                        .setSubject(username)
                         .setExpiration(new Date(date.getTime() + REFRESH_TOKEN_TIME))
                         .setIssuedAt(date)
                         .signWith(signatureAlgorithm, key)
