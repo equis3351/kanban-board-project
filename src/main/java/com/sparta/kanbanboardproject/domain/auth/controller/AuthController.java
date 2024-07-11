@@ -17,8 +17,12 @@ public class AuthController {
 
     private final AuthService authService;
     @PostMapping("/auth/refresh-token")
-    public ResponseEntity<String> refreshToken(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<String> refreshToken(
+            HttpServletRequest request,
+            HttpServletResponse response) {
+
         authService.refreshToken(request, response);
+
         return ResponseEntity.status(HttpStatus.OK)
                 .body("access와 refresh 토큰을 재발급했습니다.");
     }

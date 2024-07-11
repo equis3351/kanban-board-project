@@ -33,7 +33,7 @@ public class AuthService {
         }
 
         // refreshToken 유효성 확인
-        if(jwtService.validateToken(refreshToken)){
+        if (jwtService.validateToken(refreshToken)) {
 
             // accessToken 새로 발급
             String newAccessToken = jwtService.createToken(username);

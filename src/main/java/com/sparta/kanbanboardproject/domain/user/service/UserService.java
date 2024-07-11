@@ -27,9 +27,9 @@ public class UserService {
 
     public void signUp(SignupRequestDto requestDto) {
         UserRoleEnum role = UserRoleEnum.USER;
-        if (requestDto.getIsManager()){
+        if (requestDto.getIsManager()) {
             log.info("isManager true");
-            if (MANAGER_KEY.equals(requestDto.getManagerToken())){
+            if (MANAGER_KEY.equals(requestDto.getManagerToken())) {
                 log.info("managerKey equals");
                 role = UserRoleEnum.MANAGER;
             }
