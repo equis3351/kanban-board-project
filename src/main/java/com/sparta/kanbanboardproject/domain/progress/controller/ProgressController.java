@@ -26,8 +26,9 @@ public class ProgressController {
             @Valid @RequestBody ProgressCreateRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(progressService.addProgress(board_id, requestDto, userDetails.getUser()));
+        ProgressResponseDto progressResponseDto = progressService.addProgress(board_id, requestDto, userDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(progressResponseDto);
     }
 
     @DeleteMapping("/boards/{board_id}/progresses/{progress_id}")
@@ -37,8 +38,7 @@ public class ProgressController {
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         progressService.deleteProgress(board_id, progress_id, userDetails.getUser());
-        return ResponseEntity.status(HttpStatus.OK)
-                .body("컬럼이 삭제 되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body("컬럼이 삭제 되었습니다.");
     }
 
     @PutMapping("/boards/{board_id}/progresses/{progress_id}/sequence")
@@ -48,7 +48,8 @@ public class ProgressController {
             @RequestBody ProgressMoveRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        return ResponseEntity.status(HttpStatus.OK)
-                .body(progressService.moveProgress(board_id,progress_id,requestDto,userDetails.getUser()));
+        ProgressResponseDto progressResponseDto = progressService.moveProgress(board_id,progress_id,requestDto,userDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK).body(progressResponseDto);
     }
 }
