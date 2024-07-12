@@ -8,6 +8,8 @@ import com.sparta.kanbanboardproject.domain.progress.dto.ProgressResponseDto;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import com.sparta.kanbanboardproject.domain.progress.repository.ProgressRepository;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
+import com.sparta.kanbanboardproject.global.exception.CustomException;
+import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,7 +33,7 @@ public class ProgressService {
         List<Progress> existingProgresses = progressRepository.findByBoardId(boardId);
         for (Progress pr : existingProgresses) {
             if (pr.getStatusName().equals(requestDto.getStatusName())) {
-                throw new IllegalArgumentException("상태가 같은 컬럼을 또 생성할 수 없습니다.");
+                throw new CustomException(ErrorType.DUPLICATE_PROGRESS_STATUS);
             }
         }
 
@@ -77,7 +79,7 @@ public class ProgressService {
         Long currentSequenceNumber = changedProgress.getSequenceNumber();
 
         Progress changingProgress = progressRepository.findByBoardIdAndSequenceNumber(boardId, newSequenceNumber).orElseThrow(
-                () -> new IllegalArgumentException("바꾸려는 컬럼이 존재하지 않습니다.")
+                () -> new CustomException(ErrorType.NOT_FOUND_CHANGE_PROGRESS)
         );
 
         changingProgress.updateSequence(currentSequenceNumber);
@@ -92,19 +94,19 @@ public class ProgressService {
 
     public Board existingBoard(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("보드가 존재하지 않습니다.")
+                () -> new CustomException(ErrorType.NOT_FOUND_BOARD)
         );
     }
 
     public Progress existingProgress(Long progressId) {
         return progressRepository.findById(progressId).orElseThrow(
-                () -> new IllegalArgumentException("컬럼이 존재하지 않습니다.")
+                () ->  new CustomException(ErrorType.NOT_FOUND_PROGRESS)
         );
     }
 
     public void validatedOwner(Board board, User user) {
         if (!board.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("보드의 주인만 컬럼을 이동할 수 있습니다.");
+            throw  new CustomException(ErrorType.UNAUTHORIZED_ACCESS);
         }
     }
 
