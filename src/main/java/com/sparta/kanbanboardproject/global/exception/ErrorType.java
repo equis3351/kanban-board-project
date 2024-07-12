@@ -19,12 +19,14 @@ public enum ErrorType {
     UNAUTHORIZED_ACCESS(HttpStatus.UNAUTHORIZED, "보드의 권한에 맞지 않는 접근을 요청할 수 없습니다."),
 
     //Board
-    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다"),
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저가 존재하지 않습니다."),
+    BAD_REQUEST_USER(HttpStatus.BAD_REQUEST, "이미 초대 되어있는 사용자입니다."),
+    FORBIDDEN_USER(HttpStatus.FORBIDDEN, "userId가 일치하지 않습니다."),
 
     //Comment
-    NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "카드가 존재하지 않습니다");
+    NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "카드가 존재하지 않습니다.");
 
 
     private final HttpStatus httpStatus;
     private final String message;
-    }
+}
