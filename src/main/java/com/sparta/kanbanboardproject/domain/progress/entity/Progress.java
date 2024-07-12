@@ -26,7 +26,7 @@ public class Progress {
     @Column(name = "sequence", nullable = false)
     private Long sequenceNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
