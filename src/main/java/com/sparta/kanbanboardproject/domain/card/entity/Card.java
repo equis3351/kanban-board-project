@@ -1,6 +1,7 @@
 package com.sparta.kanbanboardproject.domain.card.entity;
 
 import com.sparta.kanbanboardproject.domain.board.entity.Board;
+import com.sparta.kanbanboardproject.domain.comment.entity.Comment;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.Worker;
@@ -42,8 +43,11 @@ public class Card {
     @JoinColumn(name = "progress_id")
     private Progress progress;
 
-    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private List<Worker> workerList;
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> commentList;
 
     @Builder
     public Card(String title, String content, Date dueDate, Board board, Progress progress) {
@@ -66,7 +70,7 @@ public class Card {
         this.dueDate = dueDate;
     }
 
-    public void updateWorker(Card card, Collaborator collaborator) {
+    public void addWorker(Card card, Collaborator collaborator) {
         Worker worker = new Worker(card, collaborator);
         workerList.add(worker);
     }

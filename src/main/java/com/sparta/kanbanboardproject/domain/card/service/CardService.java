@@ -34,30 +34,34 @@ public class CardService {
     private final CollaboratorRepository collaboratorRepository;
 
     // 카드 목록 조회
-    public List<Card> getAllByBoard(Long boardId) {
+    public List<CardResponseDto> getAllByBoard(Long boardId) {
         Board board = getBoardById(boardId);
 
-        return cardRepository.findAllByBoard(board);
+        return cardRepository.findAllByBoard(board)
+            .stream().map(CardResponseDto::new).toList();
     }
 
     // 카드 작업자별 조회
-    public List<Card> getAllByBoardAndWorker(Long boardId, Long workerId) {
+    public List<CardResponseDto> getAllByBoardAndWorker(Long boardId, Long workerId) {
         Board board = getBoardById(boardId);
 
         List<Worker> workers = workerRepository.findAllById(workerId);
         return workers.stream()
-            .map(Worker::getCard)
-            .filter(card -> card.getBoard().equals(board))
+            .filter(worker -> worker.getCard().getBoard().equals(board))
+            .map(worker -> {
+                return new CardResponseDto(worker.getCard());
+            })
             .distinct()
             .collect(Collectors.toList());
     }
 
     // 카드 상태별 조회
-    public List<Card> getAllByBoardAndProgress(Long boardId, Long progressId) {
+    public List<CardResponseDto> getAllByBoardAndProgress(Long boardId, Long progressId) {
         Board board = getBoardById(boardId);
         Progress progress = getProgressById(progressId);
 
-        return cardRepository.findAllByBoardAndProgress(board, progress);
+        return cardRepository.findAllByBoardAndProgress(board, progress)
+            .stream().map(CardResponseDto::new).toList();
     }
 
     // 카드 생성
@@ -116,12 +120,20 @@ public class CardService {
             () -> new CustomException(ErrorType.NOT_FOUND_COLLABORATOR)
         );
 
-        card.updateWorker(card, collaborator);
+        boolean existsWorker = card.getWorkerList().stream()
+            .anyMatch(worker -> worker.getUser().equals(collaborator.getUser()));
+
+        if (existsWorker) {
+            throw new CustomException(ErrorType.DUPLICATE_CARD_WORKER);
+        }
+
+        card.addWorker(card, collaborator);
 
         return new CardResponseDto(card);
     }
 
     // 카드 삭제
+    @Transactional
     public void deleteCard(Long boardId, Long progressId, Long cardId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
 

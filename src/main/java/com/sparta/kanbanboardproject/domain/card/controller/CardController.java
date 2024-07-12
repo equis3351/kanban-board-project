@@ -1,7 +1,7 @@
 package com.sparta.kanbanboardproject.domain.card.controller;
 
+import com.sparta.kanbanboardproject.domain.card.dto.CardRequestDto;
 import com.sparta.kanbanboardproject.domain.card.dto.CardResponseDto;
-import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.card.service.CardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,7 +19,7 @@ public class CardController {
 
     // 카드 목록 조회
     @GetMapping("/boards/{board_id}/cards")
-    public ResponseEntity<List<Card>> getCardList(
+    public ResponseEntity<List<CardResponseDto>> getCardList(
         @PathVariable Long board_id) {
 
         return ResponseEntity.status(HttpStatus.OK)
@@ -28,7 +28,7 @@ public class CardController {
 
     // 카드 작업자별 조회
     @GetMapping("/boards/{board_id}/cards/workers/{worker_id}")
-    public ResponseEntity<List<Card>> getCardListByWorkerList(
+    public ResponseEntity<List<CardResponseDto>> getCardListByWorkerList(
         @PathVariable Long board_id,
         @PathVariable Long worker_id) {
 
@@ -38,7 +38,7 @@ public class CardController {
 
     // 카드 상태별 조회
     @GetMapping("/boards/{board_id}/cards/progresses/{progress_id}")
-    public ResponseEntity<List<Card>> getCardListByProgress(
+    public ResponseEntity<List<CardResponseDto>> getCardListByProgress(
         @PathVariable Long board_id,
         @PathVariable Long progress_id) {
 
@@ -51,10 +51,10 @@ public class CardController {
     public ResponseEntity<CardResponseDto> addCard(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
-        @RequestBody String title) {
+        @RequestBody CardRequestDto requestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(cardService.addCard(board_id, progress_id, title));
+            .body(cardService.addCard(board_id, progress_id, requestDto.getData()));
     }
 
     // 카드 제목 수정
@@ -63,10 +63,10 @@ public class CardController {
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestBody String title) {
+        @RequestBody CardRequestDto requestDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(cardService.updateCardTitle(board_id, progress_id, card_id, title));
+            .body(cardService.updateCardTitle(board_id, progress_id, card_id, requestDto.getData()));
     }
 
     // 카드 내용 수정
@@ -75,10 +75,10 @@ public class CardController {
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestBody String content) {
+        @RequestBody CardRequestDto requestDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
-            .body(cardService.updateCardContent(board_id, progress_id, card_id, content));
+            .body(cardService.updateCardContent(board_id, progress_id, card_id, requestDto.getData()));
     }
 
     // 카드 마감일 수정
