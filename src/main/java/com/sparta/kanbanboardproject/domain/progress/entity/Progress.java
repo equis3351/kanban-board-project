@@ -41,4 +41,8 @@ public class Progress {
     public void updateSequence(Long sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
+
+    public void decreaseSequence() {
+        this.sequenceNumber -= 1;
+    }
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface CardRepository extends JpaRepository<Card, Long> {
+
     Optional<Card> findByBoardIdAndProgressIdAndId(Long boardId, Long progressId, Long id);
 
     Long countByProgressId(Long progressId);
@@ -17,4 +18,5 @@ public interface CardRepository extends JpaRepository<Card, Long> {
 
     List<Card> findAllByBoard(Board board);
     List<Card> findAllByBoardAndProgress(Board board, Progress progress);
+
 }

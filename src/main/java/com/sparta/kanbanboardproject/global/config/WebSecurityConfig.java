@@ -8,6 +8,7 @@ import com.sparta.kanbanboardproject.global.security.UserDetailsServiceImpl;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -66,10 +67,17 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                         .permitAll()
-                        .requestMatchers("/users/signup").permitAll()
-                        .requestMatchers("/users/login").permitAll()
-                        .requestMatchers("/auth/refresh-token").permitAll()
-                        .requestMatchers("/error").permitAll()
+                        .requestMatchers("/users/signup", "/users/login", "/auth/refresh-token", "/error").permitAll()
+                        .requestMatchers("/users/logout").hasAnyRole("MANAGER", "USER")
+                        .requestMatchers("/boards/**").hasRole("MANAGER")
+                        .requestMatchers(HttpMethod.GET, "/boards/**").hasAnyRole("MANAGER", "USER")
+                        .requestMatchers(HttpMethod.POST,
+                                "/boards/{board_id}/progress/{progress_id}/cards",
+                                "/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/comments").hasAnyRole("MANAGER", "USER")
+                        .requestMatchers(HttpMethod.PUT,
+                                "/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/**").hasAnyRole("MANAGER", "USER")
+                        .requestMatchers(HttpMethod.DELETE,
+                                "/boards/{board_id}/progresses/{progress_id}/cards/{card_id}").hasAnyRole("MANAGER", "USER")
                         .anyRequest().authenticated()
         );
 

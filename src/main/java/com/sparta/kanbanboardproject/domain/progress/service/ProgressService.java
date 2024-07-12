@@ -28,15 +28,13 @@ public class ProgressService {
     @Transactional
     public ProgressResponseDto addProgress(Long boardId, ProgressCreateRequestDto requestDto, User user) {
 
-        Board board = existingBoard(boardId);
+        Board board = getBoard(boardId);
 
         validatedOwner(board, user);
 
-        List<Progress> existingProgresses = progressRepository.findByBoardId(boardId);
-        for (Progress pr : existingProgresses) {
-            if (pr.getStatusName().equals(requestDto.getStatusName())) {
-                throw new CustomException(ErrorType.DUPLICATE_PROGRESS_STATUS);
-            }
+        List<Progress> progressList = progressRepository.findByBoardId(boardId);
+        for (Progress pr : progressList) {
+            equalStatusName(pr, requestDto);
         }
 
         Progress progress = new Progress(requestDto, board);
@@ -52,17 +50,17 @@ public class ProgressService {
 
     public void deleteProgress(Long boardId, Long progressId, User user) {
 
-        Board board = existingBoard(boardId);
+        Board board = getBoard(boardId);
 
         validatedOwner(board, user);
 
-        Progress progress = existingProgress(progressId);
+        Progress progress = getProgress(progressId);
 
         progressRepository.delete(progress);
 
         List<Progress> progressList = progressRepository.findByBoardIdAndSequenceNumberGreaterThan(boardId, progress.getSequenceNumber());
         for (Progress pr : progressList) {
-            pr.updateSequence(pr.getSequenceNumber() - 1);
+            pr.decreaseSequence();
         }
 
         progressRepository.saveAll(progressList);
@@ -71,11 +69,11 @@ public class ProgressService {
     @Transactional
     public ProgressResponseDto moveProgress(Long boardId, Long progressId, ProgressMoveRequestDto requestDto, User user) {
 
-        Board board = existingBoard(boardId);
+        Board board = getBoard(boardId);
 
         validatedOwner(board, user);
 
-        Progress changedProgress = existingProgress(progressId);
+        Progress changedProgress = getProgress(progressId);
 
         Long newSequenceNumber = requestDto.getSequenceNumber();
         Long currentSequenceNumber = changedProgress.getSequenceNumber();
@@ -85,22 +83,26 @@ public class ProgressService {
         );
 
         changingProgress.updateSequence(currentSequenceNumber);
-        progressRepository.save(changingProgress);
 
         changedProgress.updateSequence(newSequenceNumber);
-        progressRepository.save(changedProgress);
 
         return new ProgressResponseDto(changedProgress);
     }
 
+    public void equalStatusName(Progress pr, ProgressCreateRequestDto requestDto){
+        if (pr.getStatusName().equals(requestDto.getStatusName())) {
+            throw new CustomException(ErrorType.DUPLICATE_PROGRESS_STATUS);
+        }
+    }
 
-    public Board existingBoard(Long boardId) {
+
+    public Board getBoard(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
                 () -> new CustomException(ErrorType.NOT_FOUND_BOARD)
         );
     }
 
-    public Progress existingProgress(Long progressId) {
+    public Progress getProgress(Long progressId) {
         return progressRepository.findById(progressId).orElseThrow(
                 () ->  new CustomException(ErrorType.NOT_FOUND_PROGRESS)
         );
