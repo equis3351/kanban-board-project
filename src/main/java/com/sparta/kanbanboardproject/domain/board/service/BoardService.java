@@ -9,6 +9,8 @@ import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
 import com.sparta.kanbanboardproject.domain.user.repository.UserRepository;
+import com.sparta.kanbanboardproject.global.exception.CustomException;
+import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -73,16 +75,16 @@ public class BoardService {
     //협력자 초대
     public String inviteCollaborator(User user, Long invitedUserId, Long boardId) {
         User invitedUser = userRepository.findById(invitedUserId).orElseThrow(
-                () -> new IllegalArgumentException("not found")
+                () -> new CustomException(ErrorType.NOT_FOUND_USER)
         );
         Board board = boardRepository.findById(boardId).orElseThrow(
-                () -> new IllegalArgumentException("not found")
+                () -> new CustomException(ErrorType.NOT_FOUND_BOARD)
         );
 
         checkUserId(user, board);
 
         if (collaboratorRepository.existsByUserId(invitedUserId)) {
-            throw new IllegalArgumentException("이미 초대 되어있는 사용자입니다.");
+            throw new CustomException(ErrorType.BAD_REQUEST_USER);
         }
 
         Collaborator collaborator = new Collaborator(invitedUser, board);
@@ -95,14 +97,14 @@ public class BoardService {
     //유저 아이디 체크
     private void checkUserId(User user, Board board) {
         if (!(user.getId().equals(board.getUser().getId()))) {
-            throw new IllegalArgumentException("userId가 일치하지 않습니다");
+            throw new CustomException(ErrorType.FORBIDDEN_USER);
         }
     }
 
     //보드 id로 조회
     private Board findByIdBoard(Long id) {
         return boardRepository.findById(id).orElseThrow(
-                () -> new IllegalArgumentException("not found")
+                () -> new CustomException(ErrorType.NOT_FOUND_BOARD)
         );
     }
 
