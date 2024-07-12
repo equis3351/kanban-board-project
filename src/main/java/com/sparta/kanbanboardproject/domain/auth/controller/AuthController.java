@@ -17,7 +17,7 @@ public class AuthController {
 
     private final AuthService authService;
     @PostMapping("/auth/refresh-token")
-    public ResponseEntity<String> refreshToken(
+    public ResponseEntity<String> refreshToken (
             HttpServletRequest request,
             HttpServletResponse response) {
 

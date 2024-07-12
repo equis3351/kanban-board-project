@@ -1,15 +1,17 @@
 package com.sparta.kanbanboardproject.domain.card.entity;
 
 import com.sparta.kanbanboardproject.domain.board.entity.Board;
+import com.sparta.kanbanboardproject.domain.comment.entity.Comment;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
+import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
+import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.DynamicUpdate;
 
-import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Getter
@@ -30,7 +32,8 @@ public class Card {
     @Temporal(TemporalType.DATE)
     private Date dueDate;
 
-    private Long sequence;
+    @Column(name = "sequence", nullable = false)
+    private Long sequenceNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -40,12 +43,17 @@ public class Card {
     @JoinColumn(name = "progress_id")
     private Progress progress;
 
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Worker> workerList;
+
+    @OneToMany(mappedBy = "card", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    private List<Comment> commentList;
+
     @Builder
-    public Card(String title, String content, Date dueDate, Long sequence, Board board, Progress progress) {
+    public Card(String title, String content, Date dueDate, Board board, Progress progress) {
         this.title = title;
         this.content = content;
         this.dueDate = dueDate;
-        this.sequence = sequence;
         this.board = board;
         this.progress = progress;
     }
@@ -60,6 +68,15 @@ public class Card {
 
     public void updateDueDate(Date dueDate) {
         this.dueDate = dueDate;
+    }
+
+    public void addWorker(Card card, Collaborator collaborator) {
+        Worker worker = new Worker(card, collaborator);
+        workerList.add(worker);
+    }
+
+    public void updateSequence(Long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
     }
 
     public void updateProgress(Progress progress) {
