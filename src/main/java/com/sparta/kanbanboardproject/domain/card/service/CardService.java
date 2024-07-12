@@ -11,6 +11,8 @@ import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
 import com.sparta.kanbanboardproject.domain.user.repository.WorkerRepository;
+import com.sparta.kanbanboardproject.global.exception.CustomException;
+import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -111,7 +113,7 @@ public class CardService {
     public CardResponseDto updateCardWorker(Long boardId, Long progressId, Long cardId, Long workerId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
         Collaborator collaborator = collaboratorRepository.findById(workerId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Collaborator")
+            () -> new CustomException(ErrorType.NOT_FOUND_COLLABORATOR)
         );
 
         card.updateWorker(card, collaborator);
@@ -159,7 +161,7 @@ public class CardService {
         Long currentSequenceNumber = changedCard.getSequenceNumber();
 
         Card changingCard = cardRepository.findByProgressIdAndSequenceNumber(progressId, sequenceNum).orElseThrow(
-            () -> new IllegalArgumentException("바꾸려는 컬럼이 존재하지 않습니다.")
+            () -> new CustomException(ErrorType.NOT_FOUND_CHANGE_CARD)
         );
 
         changingCard.updateSequence(currentSequenceNumber);
@@ -181,21 +183,21 @@ public class CardService {
     // 보드 확인
     private Board getBoardById(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Board")
+            () -> new CustomException(ErrorType.NOT_FOUND_BOARD)
         );
     }
 
     // 컬럼 확인
     private Progress getProgressById(Long progressId) {
         return progressRepository.findById(progressId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Progress")
+            () -> new CustomException(ErrorType.NOT_FOUND_PROGRESS)
         );
     }
 
     // 카드 확인
     private Card getCardByIdAndBoardIdAndProgressId(Long boardId, Long progressId, Long cardId) {
         return cardRepository.findByBoardIdAndProgressIdAndId(boardId, progressId, cardId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Card")
+            () -> new CustomException(ErrorType.NOT_FOUND_CARD)
         );
     }
 
