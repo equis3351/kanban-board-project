@@ -18,26 +18,26 @@ public class Board {
     private Long id;
 
     @NotBlank
-    @Column(nullable = false, unique = true, length = 20)
+    @Column(nullable = false, unique = true)
     private String boardName;
 
     @NotBlank
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false)
     private String boardIntro;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Board(BoardRequestDto requestDtp, User user) {
-        this.boardName = requestDtp.getBoardName();
-        this.boardIntro = requestDtp.getBoardIntro();
+    public Board(BoardRequestDto requestDto, User user) {
+        this.boardName = requestDto.getBoardName();
+        this.boardIntro = requestDto.getBoardIntro();
         this.user = user;
     }
 
-    public void updateBoard(BoardRequestDto requestDtp) {
-        this.boardName = requestDtp.getBoardName();
-        this.boardIntro = requestDtp.getBoardIntro();
+    public void updateBoard(BoardRequestDto requestDto) {
+        this.boardName = requestDto.getBoardName();
+        this.boardIntro = requestDto.getBoardIntro();
     }
 
 }

@@ -1,6 +1,8 @@
 package com.sparta.kanbanboardproject.domain.comment.entity;
 
+import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.comment.dto.CommentRequestDto;
+import com.sparta.kanbanboardproject.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -11,13 +13,11 @@ import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-@Table(name = "comment")
-public class Comment {
+@Getter
+@NoArgsConstructor
+@Table(name = "comments")
+public class Comment extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,12 +27,17 @@ public class Comment {
     @Column(nullable = false, length = 50)
     private String comment;
 
-    @CreatedDate
-    @Column(updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime createdAt;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "card_id")
+    private Card card;
 
-    public Comment(CommentRequestDto commentRequestDto) {
-        this.comment=commentRequestDto.getComment();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public Comment(CommentRequestDto commentRequestDto, Card card, User user) {
+        this.comment = commentRequestDto.getComment();
+        this.card = card;
+        this.user = user;
     }
 }
