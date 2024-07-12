@@ -1,16 +1,14 @@
 package com.sparta.kanbanboardproject.domain.progress.dto;
 
-
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
 public class ProgressResponseDto {
 
-    private String statusName;
-    private Long sequenceNum;
+    private final String statusName;
+    private final Long sequenceNum;
 
     public ProgressResponseDto(Progress progress) {
         this.statusName = progress.getStatusName();

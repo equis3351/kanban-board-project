@@ -26,9 +26,7 @@ public class ProgressService {
 
         Board board = existingBoard(boardId);
 
-        if (!board.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("보드의 주인만 컬럼을 생성 할 수 있습니다.");
-        }
+        validatedOwner(board, user);
 
         List<Progress> existingProgresses = progressRepository.findByBoardId(boardId);
         for (Progress pr : existingProgresses) {
@@ -51,9 +49,8 @@ public class ProgressService {
     public void deleteProgress(Long boardId, Long progressId, User user) {
 
         Board board = existingBoard(boardId);
-        if (!board.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("보드의 주인만 컬럼을 삭제 할 수 있습니다.");
-        }
+
+        validatedOwner(board, user);
 
         Progress progress = existingProgress(progressId);
 
@@ -69,22 +66,19 @@ public class ProgressService {
 
     @Transactional
     public ProgressResponseDto moveProgress(Long boardId, Long progressId, ProgressMoveRequestDto requestDto, User user) {
+
         Board board = existingBoard(boardId);
 
-        if (!board.getUser().getId().equals(user.getId())) {
-            throw new IllegalArgumentException("보드의 주인만 컬럼을 이동할 수 있습니다.");
-        }
+        validatedOwner(board, user);
 
         Progress changedProgress = existingProgress(progressId);
 
         Long newSequenceNumber = requestDto.getSequenceNumber();
         Long currentSequenceNumber = changedProgress.getSequenceNumber();
 
-        Progress changingProgress = progressRepository.findByBoardIdAndSequenceNumber(boardId, newSequenceNumber);
-
-        if (changingProgress == null) {
-            throw new IllegalArgumentException("바꾸려는 컬럼이 존재하지 않습니다.");
-        }
+        Progress changingProgress = progressRepository.findByBoardIdAndSequenceNumber(boardId, newSequenceNumber).orElseThrow(
+                () -> new IllegalArgumentException("바꾸려는 컬럼이 존재하지 않습니다.")
+        );
 
         changingProgress.updateSequence(currentSequenceNumber);
         progressRepository.save(changingProgress);
@@ -107,4 +101,11 @@ public class ProgressService {
                 () -> new IllegalArgumentException("컬럼이 존재하지 않습니다.")
         );
     }
+
+    public void validatedOwner(Board board, User user) {
+        if (!board.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("보드의 주인만 컬럼을 이동할 수 있습니다.");
+        }
+    }
+
 }

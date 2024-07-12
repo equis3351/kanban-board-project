@@ -6,7 +6,6 @@ import com.sparta.kanbanboardproject.domain.progress.dto.ProgressCreateRequestDt
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
