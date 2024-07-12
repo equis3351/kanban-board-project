@@ -4,6 +4,8 @@ import com.sparta.kanbanboardproject.domain.user.dto.SignupRequestDto;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import com.sparta.kanbanboardproject.domain.user.entity.UserRoleEnum;
 import com.sparta.kanbanboardproject.domain.user.repository.UserRepository;
+import com.sparta.kanbanboardproject.global.exception.CustomException;
+import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import com.sparta.kanbanboardproject.global.jwt.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
@@ -46,7 +48,7 @@ public class UserService {
         jwtService.validateToken(accessToken);
 
         User saveUser = userRepository.findByUsername(user.getUsername()).orElseThrow(
-                ()-> new IllegalArgumentException("유저를 찾을 수 없습니다.")
+                ()-> new CustomException(ErrorType.INVALID_ACCOUNT_ID)
         );
         saveUser.logoutUser();
 
