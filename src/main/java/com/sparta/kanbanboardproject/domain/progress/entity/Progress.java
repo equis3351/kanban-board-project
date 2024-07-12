@@ -6,7 +6,6 @@ import com.sparta.kanbanboardproject.domain.progress.dto.ProgressCreateRequestDt
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.util.List;
 
@@ -27,7 +26,7 @@ public class Progress {
     @Column(name = "sequence", nullable = false)
     private Long sequenceNumber;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id", nullable = false)
     private Board board;
 
