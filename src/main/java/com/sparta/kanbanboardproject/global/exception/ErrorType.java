@@ -7,9 +7,11 @@ import org.springframework.http.HttpStatus;
 @Getter
 @AllArgsConstructor
 public enum ErrorType {
-    // LOGIN
+    // USER
     INVALID_ACCOUNT_ID(HttpStatus.UNAUTHORIZED, "아이디가 일치하지 않습니다."),
     INVALID_PASSWORD(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+    NOT_FOUND_TOKEN(HttpStatus.NOT_FOUND, "토큰을 찾을 수 없습니다."),
+    NOT_FOUND_USER(HttpStatus.NOT_FOUND, "유저를 찾을 수 없습니다."),
 
     // PROGRESS
     DUPLICATE_PROGRESS_STATUS(HttpStatus.LOCKED, "상태가 같은 컬럼을 또 생성할 수 없습니다."),

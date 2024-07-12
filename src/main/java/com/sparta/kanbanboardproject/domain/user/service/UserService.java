@@ -30,9 +30,7 @@ public class UserService {
     public void signUp(SignupRequestDto requestDto) {
         UserRoleEnum role = UserRoleEnum.USER;
         if (requestDto.getIsManager()) {
-            log.info("isManager true");
             if (MANAGER_KEY.equals(requestDto.getManagerToken())) {
-                log.info("managerKey equals");
                 role = UserRoleEnum.MANAGER;
             }
         }
@@ -48,7 +46,7 @@ public class UserService {
         jwtService.validateToken(accessToken);
 
         User saveUser = userRepository.findByUsername(user.getUsername()).orElseThrow(
-                ()-> new CustomException(ErrorType.INVALID_ACCOUNT_ID)
+                ()-> new CustomException(ErrorType.NOT_FOUND_USER)
         );
         saveUser.logoutUser();
 

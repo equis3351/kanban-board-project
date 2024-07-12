@@ -2,6 +2,8 @@ package com.sparta.kanbanboardproject.global.jwt;
 
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import com.sparta.kanbanboardproject.domain.user.repository.UserRepository;
+import com.sparta.kanbanboardproject.global.exception.CustomException;
+import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import com.sparta.kanbanboardproject.global.security.UserDetailsServiceImpl;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -80,7 +82,7 @@ public class JwtService {
             return tokenValue.substring(7);
         }
         logger.error("Not Found Token");
-        throw new NullPointerException("Not Found Token");
+        throw new CustomException(ErrorType.NOT_FOUND_TOKEN);
     }
 
     // 토큰 검증
@@ -90,7 +92,9 @@ public class JwtService {
 
             String username = extractUsername(token);
             User user = userRepository.findByUsername(username)
-                    .orElseThrow(IllegalArgumentException::new);
+                    .orElseThrow(
+                            () -> new CustomException(ErrorType.NOT_FOUND_USER)
+                    );
 
             if ("logged out".equals(user.getRefreshToken())) {
                 logger.error("로그아웃된 유저의 Refresh Token입니다.");
