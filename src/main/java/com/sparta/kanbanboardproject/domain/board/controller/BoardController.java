@@ -53,7 +53,7 @@ public class BoardController {
     }
 
     @DeleteMapping("/boards/{id}")
-    public ResponseEntity<BoardResponseDto> updateBoard(
+    public ResponseEntity<BoardResponseDto> deleteBoard(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long id) {
         return ResponseEntity.status(HttpStatus.OK).

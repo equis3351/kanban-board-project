@@ -5,10 +5,9 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-@Setter
 public class CommentResponseDto {
-    private Long id;
-    private String comment;
+    private final Long id;
+    private final String comment;
 
     public CommentResponseDto(Comment comment) {
         this.id=comment.getId();

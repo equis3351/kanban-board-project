@@ -7,33 +7,23 @@ import com.sparta.kanbanboardproject.domain.board.repository.BoardRepository;
 
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
-import com.sparta.kanbanboardproject.domain.user.entity.UserRoleEnum;
 import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
 import com.sparta.kanbanboardproject.domain.user.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class BoardService {
 
     private final UserRepository userRepository;
     private final BoardRepository boardRepository;
     private final CollaboratorRepository collaboratorRepository;
 
-    public BoardService(UserRepository userRepository, BoardRepository boardRepository, CollaboratorRepository collaboratorRepository) {
-        this.userRepository = userRepository;
-        this.boardRepository = boardRepository;
-        this.collaboratorRepository = collaboratorRepository;
-    }
 
-    public void checkUserId(User user, Board board) {
-        if (!(user.getId().equals(board.getUser().getId()))) {
-            throw new IllegalArgumentException("userId가 일치하지 않습니다");
-        }
-    }
-
-
+    //보드 생성
     public BoardResponseDto addBoard(User user, BoardRequestDto requestDto) {
 
         Board board = new Board(requestDto, user);
@@ -44,20 +34,23 @@ public class BoardService {
         return new BoardResponseDto(board);
     }
 
+    //보드 조회
     public BoardResponseDto getBoard(Long id) {
-        Board board = boardRepository.findById(id).orElseThrow();
+        Board board = findByIdBoard(id);
 
         return new BoardResponseDto(board);
     }
 
+    //모든 보드 조회
     public List<BoardResponseDto> getAllBoard() {
         List<Board> board = boardRepository.findAll();
 
         return board.stream().map(BoardResponseDto::new).toList();
     }
 
+    //보드 수정
     public BoardResponseDto updateBoard(User user, Long id, BoardRequestDto requestDto) {
-        Board board = boardRepository.findById(id).orElseThrow();
+        Board board = findByIdBoard(id);
         checkUserId(user, board);
 
         board.updateBoard(requestDto);
@@ -67,8 +60,9 @@ public class BoardService {
         return new BoardResponseDto(board);
     }
 
+    //보드 삭제
     public BoardResponseDto deleteBoard(User user, Long id) {
-        Board board = boardRepository.findById(id).orElseThrow();
+        Board board = findByIdBoard(id);
         checkUserId(user, board);
 
         boardRepository.delete(board);
@@ -76,9 +70,14 @@ public class BoardService {
         return new BoardResponseDto(board);
     }
 
+    //협력자 초대
     public String inviteCollaborator(User user, Long invitedUserId, Long boardId) {
-        User invitedUser = userRepository.findById(invitedUserId).orElseThrow();
-        Board board = boardRepository.findById(boardId).orElseThrow();
+        User invitedUser = userRepository.findById(invitedUserId).orElseThrow(
+                () -> new IllegalArgumentException("not found")
+        );
+        Board board = boardRepository.findById(boardId).orElseThrow(
+                () -> new IllegalArgumentException("not found")
+        );
 
         checkUserId(user, board);
 
@@ -92,4 +91,19 @@ public class BoardService {
 
         return invitedUser.getUsername() + "님 초대 완료";
     }
+
+    //유저 아이디 체크
+    private void checkUserId(User user, Board board) {
+        if (!(user.getId().equals(board.getUser().getId()))) {
+            throw new IllegalArgumentException("userId가 일치하지 않습니다");
+        }
+    }
+
+    //보드 id로 조회
+    private Board findByIdBoard(Long id) {
+        return boardRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("not found")
+        );
+    }
+
 }
