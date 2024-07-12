@@ -13,13 +13,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/boards/{board_id}")
 public class CardController {
 
     private final CardService cardService;
 
     // 카드 목록 조회
-    @GetMapping("/cards")
+    @GetMapping("/boards/{board_id}/cards")
     public ResponseEntity<List<Card>> getCardList(
         @PathVariable Long board_id) {
 
@@ -28,7 +27,7 @@ public class CardController {
     }
 
     // 카드 작업자별 조회
-    @GetMapping("/cards/workers/{worker_id}")
+    @GetMapping("/boards/{board_id}/cards/workers/{worker_id}")
     public ResponseEntity<List<Card>> getCardListByWorkerList(
         @PathVariable Long board_id,
         @PathVariable Long worker_id) {
@@ -38,7 +37,7 @@ public class CardController {
     }
 
     // 카드 상태별 조회
-    @GetMapping("/cards/progresses/{progress_id}")
+    @GetMapping("/boards/{board_id}/cards/progresses/{progress_id}")
     public ResponseEntity<List<Card>> getCardListByProgress(
         @PathVariable Long board_id,
         @PathVariable Long progress_id) {
@@ -48,54 +47,54 @@ public class CardController {
     }
 
     // 카드 생성
-    @PostMapping("/progresses/{progress_id}/cards")
-    public ResponseEntity<CardResponseDto> createCard(
+    @PostMapping("/boards/{board_id}/progresses/{progress_id}/cards")
+    public ResponseEntity<CardResponseDto> addCard(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
-        @RequestParam String title) {
+        @RequestBody String title) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
-            .body(cardService.createCard(board_id, progress_id, title));
+            .body(cardService.addCard(board_id, progress_id, title));
     }
 
     // 카드 제목 수정
-    @PutMapping("/{progress_id}/cards/{card_id}/title")
+    @PutMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/title")
     public ResponseEntity<CardResponseDto> updateCardTitle(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestParam String title) {
+        @RequestBody String title) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(cardService.updateCardTitle(board_id, progress_id, card_id, title));
     }
 
     // 카드 내용 수정
-    @PutMapping("/{progress_id}/cards/{card_id}/content")
+    @PutMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/content")
     public ResponseEntity<CardResponseDto> updateCardContent(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestParam String content) {
+        @RequestBody String content) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(cardService.updateCardContent(board_id, progress_id, card_id, content));
     }
 
     // 카드 마감일 수정
-    @PutMapping("/{progress_id}/cards/{card_id}/due-date")
+    @PutMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/due-date")
     public ResponseEntity<CardResponseDto> updateCardDueDate(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
         @PathVariable Long card_id,
-        @RequestParam Date dueDate) {
+        @RequestBody Date dueDate) {
 
         return ResponseEntity.status(HttpStatus.OK)
             .body(cardService.updateCardDueDate(board_id, progress_id, card_id, dueDate));
     }
 
     // 카드 작업자 지정
-    @PutMapping("/{progress_id}/cards/{card_id}/worker")
+    @PutMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/worker")
     public ResponseEntity<CardResponseDto> updateCardWorker(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
@@ -107,7 +106,7 @@ public class CardController {
     }
 
     // 카드 삭제
-    @DeleteMapping("/progresses/{progress_id}/cards/{card_id}")
+    @DeleteMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}")
     public ResponseEntity<String> deleteCard(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
@@ -120,7 +119,7 @@ public class CardController {
     }
 
     // 카드 상태 변경
-    @PutMapping("/progresses/{progress_id}/cards/{card_id}/status")
+    @PutMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/status")
     public ResponseEntity<CardResponseDto> updateCardStatus(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
@@ -132,7 +131,7 @@ public class CardController {
     }
 
     // 카드 순서 이동
-    @PutMapping("/progresses/{progress_id}/cards/{card_id}/sequence")
+    @PutMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}/sequence")
     public ResponseEntity<CardResponseDto> moveCard(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,
@@ -144,7 +143,7 @@ public class CardController {
     }
 
     // 카드 상세 조회
-    @GetMapping("/progresses/{progress_id}/cards/{card_id}")
+    @GetMapping("/boards/{board_id}/progresses/{progress_id}/cards/{card_id}")
     public ResponseEntity<CardResponseDto> getCard(
         @PathVariable Long board_id,
         @PathVariable Long progress_id,

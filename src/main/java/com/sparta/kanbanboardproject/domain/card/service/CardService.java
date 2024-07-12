@@ -59,7 +59,7 @@ public class CardService {
     }
 
     // 카드 생성
-    public CardResponseDto createCard(Long boardId, Long progressId, String title) {
+    public CardResponseDto addCard(Long boardId, Long progressId, String title) {
         Board board = getBoardById(boardId);
         Progress progress = getProgressById(progressId);
 
@@ -111,7 +111,8 @@ public class CardService {
     public CardResponseDto updateCardWorker(Long boardId, Long progressId, Long cardId, Long workerId) {
         Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
         Collaborator collaborator = collaboratorRepository.findById(workerId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Collaborator"));
+            () -> new IllegalArgumentException("Not Found Collaborator")
+        );
 
         card.updateWorker(card, collaborator);
 
@@ -144,7 +145,7 @@ public class CardService {
             cd.updateSequence(cd.getSequenceNumber() - 1);
         }
 
-        Long countCards = cardRepository.countByProgressId(progressId);
+        Long countCards = cardRepository.countByProgressId(updateProgressId);
         card.updateSequence(countCards + 1);
         cardRepository.save(card);
 
@@ -180,19 +181,22 @@ public class CardService {
     // 보드 확인
     private Board getBoardById(Long boardId) {
         return boardRepository.findById(boardId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Board"));
+            () -> new IllegalArgumentException("Not Found Board")
+        );
     }
 
     // 컬럼 확인
     private Progress getProgressById(Long progressId) {
         return progressRepository.findById(progressId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Progress"));
+            () -> new IllegalArgumentException("Not Found Progress")
+        );
     }
 
     // 카드 확인
     private Card getCardByIdAndBoardIdAndProgressId(Long boardId, Long progressId, Long cardId) {
         return cardRepository.findByBoardIdAndProgressIdAndId(boardId, progressId, cardId).orElseThrow(
-            () -> new IllegalArgumentException("Not Found Card"));
+            () -> new IllegalArgumentException("Not Found Card")
+        );
     }
 
 }
