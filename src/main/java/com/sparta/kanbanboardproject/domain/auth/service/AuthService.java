@@ -12,9 +12,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
+@Slf4j(topic = "AuthService")
 @Service
 @RequiredArgsConstructor
-@Slf4j(topic = "TokenService")
 @Component
 public class AuthService {
     private final UserRepository userRepository;
@@ -40,7 +40,7 @@ public class AuthService {
             // accessToken 새로 발급
             String newAccessToken = jwtService.createToken(username);
             log.info("새로운 access token : {}", newAccessToken);
-            //refreshToken 새로 발급
+            // refreshToken 새로 발급
             String newRefreshToken = jwtService.createRefreshToken(username);
             log.info("새로운 refresh token : {}", newRefreshToken);
 

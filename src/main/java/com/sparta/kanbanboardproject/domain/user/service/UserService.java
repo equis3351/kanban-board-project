@@ -15,9 +15,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+@Slf4j(topic = "UserService")
 @Service
 @RequiredArgsConstructor
-@Slf4j(topic = "UserService")
 public class UserService {
 
     private final UserRepository userRepository;

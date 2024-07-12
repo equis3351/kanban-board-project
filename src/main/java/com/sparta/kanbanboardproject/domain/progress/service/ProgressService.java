@@ -11,11 +11,13 @@ import com.sparta.kanbanboardproject.domain.user.entity.User;
 import com.sparta.kanbanboardproject.global.exception.CustomException;
 import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j(topic = "ProgressService")
 @Service
 @RequiredArgsConstructor
 public class ProgressService {

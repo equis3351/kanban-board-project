@@ -2,7 +2,6 @@ package com.sparta.kanbanboardproject.domain.comment.dto;
 
 import com.sparta.kanbanboardproject.domain.comment.entity.Comment;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class CommentResponseDto {

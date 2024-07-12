@@ -5,13 +5,8 @@ import com.sparta.kanbanboardproject.domain.comment.dto.CommentRequestDto;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Getter

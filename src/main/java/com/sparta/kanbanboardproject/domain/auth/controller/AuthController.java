@@ -10,9 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@Slf4j(topic = "AuthController")
 @RestController
 @AllArgsConstructor
-@Slf4j(topic = "AuthController")
 public class AuthController {
 
     private final AuthService authService;

@@ -22,9 +22,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j(topic = "CardService")
 @Service
 @RequiredArgsConstructor
-@Slf4j(topic = "CardService")
 public class CardService {
 
     private final CardRepository cardRepository;

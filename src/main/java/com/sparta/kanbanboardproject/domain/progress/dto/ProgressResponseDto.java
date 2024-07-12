@@ -2,7 +2,6 @@ package com.sparta.kanbanboardproject.domain.progress.dto;
 
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 public class ProgressResponseDto {
