@@ -37,9 +37,6 @@ public class Board {
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Collaborator> collaboratorList;
 
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cardList;
-
     public Board(BoardRequestDto requestDto, User user) {
         this.boardName = requestDto.getBoardName();
         this.boardIntro = requestDto.getBoardIntro();
