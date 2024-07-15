@@ -1,7 +1,6 @@
 package com.sparta.kanbanboardproject.domain.card.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.sparta.kanbanboardproject.domain.board.entity.Board;
 import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.card.entity.QCard;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
@@ -29,20 +28,6 @@ public class CardRepositoryImpl implements CustomCardRepository {
     }
 
     @Override
-    public Optional<Card> findByBoardIdAndProgressIdAndId(Long boardId, Long progressId, Long id) {
-        QCard card = QCard.card;
-
-        Card foundCard = queryFactory
-                .selectFrom(card)
-                .where(card.board.id.eq(boardId)
-                        .and(card.progress.id.eq(progressId))
-                        .and(card.id.eq(id)))
-                .fetchOne();
-
-        return Optional.ofNullable(foundCard);
-    }
-
-    @Override
     public Optional<Card> findByProgressIdAndSequenceNumber(Long progressId, Long sequenceNum) {
         QCard card = QCard.card;
 
@@ -55,22 +40,12 @@ public class CardRepositoryImpl implements CustomCardRepository {
     }
 
     @Override
-    public List<Card> findAllByBoard(Board board) {
+    public List<Card> findAllByProgress(Progress progress) {
         QCard card = QCard.card;
 
         return queryFactory
                 .selectFrom(card)
-                .where(card.board.eq(board))
-                .fetch();
-    }
-
-    @Override
-    public List<Card> findAllByBoardAndProgress(Board board, Progress progress) {
-        QCard card = QCard.card;
-
-        return queryFactory
-                .selectFrom(card)
-                .where(card.board.eq(board).and(card.progress.eq(progress)))
+                .where(card.progress.eq(progress))
                 .fetch();
     }
 
