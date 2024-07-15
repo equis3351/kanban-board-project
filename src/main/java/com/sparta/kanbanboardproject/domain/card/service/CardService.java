@@ -10,7 +10,7 @@ import com.sparta.kanbanboardproject.domain.progress.repository.ProgressReposito
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
-import com.sparta.kanbanboardproject.domain.user.repository.WorkerRepository;
+import com.sparta.kanbanboardproject.domain.user.repository.worker.WorkerRepository;
 import com.sparta.kanbanboardproject.global.exception.CustomException;
 import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
