@@ -1,9 +1,7 @@
 package com.sparta.kanbanboardproject.domain.card.entity;
 
-import com.sparta.kanbanboardproject.domain.board.entity.Board;
 import com.sparta.kanbanboardproject.domain.comment.entity.Comment;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
-import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import jakarta.persistence.*;

@@ -8,7 +8,6 @@ import com.sparta.kanbanboardproject.domain.card.repository.CardRepository;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import com.sparta.kanbanboardproject.domain.progress.repository.ProgressRepository;
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
-import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
 import com.sparta.kanbanboardproject.domain.user.repository.WorkerRepository;
 import com.sparta.kanbanboardproject.global.exception.CustomException;
@@ -142,7 +141,7 @@ public class CardService {
     }
 
     // 카드 상태 변경
-    public CardResponseDto updateCardStatus(Long progressId, Long cardId, Long updateProgressId) {
+    public CardResponseDto updateCardStatus(Long cardId, Long progressId, Long updateProgressId) {
         Card card = getCardById(cardId);
         Progress progress = getProgressById(updateProgressId);
         
@@ -162,7 +161,7 @@ public class CardService {
 
     // 카드 순서 이동
     @Transactional
-    public CardResponseDto moveCard(Long progressId, Long cardId, Long sequenceNum) {
+    public CardResponseDto moveCard(Long cardId, Long progressId, Long sequenceNum) {
         Card changedCard = getCardById(cardId);
         Long currentSequenceNumber = changedCard.getSequenceNumber();
 

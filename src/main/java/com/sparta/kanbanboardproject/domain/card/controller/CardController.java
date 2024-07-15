@@ -119,11 +119,11 @@ public class CardController {
     // 카드 상태 변경
     @PutMapping("/cards/{card_id}/progresses/{progress_id}/status")
     public ResponseEntity<CardResponseDto> updateCardStatus(
-        @PathVariable Long progress_id,
         @PathVariable Long card_id,
+        @PathVariable Long progress_id,
         @RequestBody CardRequestDto<Long> requestDto) {
 
-        CardResponseDto responseDto = cardService.updateCardStatus(progress_id, card_id, requestDto.getData());
+        CardResponseDto responseDto = cardService.updateCardStatus(card_id, progress_id, requestDto.getData());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -131,11 +131,11 @@ public class CardController {
     // 카드 순서 이동
     @PutMapping("/cards/{card_id}/progresses/{progress_id}/sequence")
     public ResponseEntity<CardResponseDto> moveCard(
-        @PathVariable Long progress_id,
         @PathVariable Long card_id,
+        @PathVariable Long progress_id,
         @RequestBody CardRequestDto<Long> requestDto) {
 
-        CardResponseDto responseDto = cardService.moveCard(progress_id, card_id, requestDto.getData());
+        CardResponseDto responseDto = cardService.moveCard(card_id, progress_id, requestDto.getData());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
