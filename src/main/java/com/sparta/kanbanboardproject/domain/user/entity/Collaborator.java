@@ -25,9 +25,6 @@ public class Collaborator {
     @JoinColumn(name = "board_id")
     private Board board;
 
-    @OneToMany(mappedBy = "collaborator", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Worker> workers;
-
     public Collaborator(User user, Board board) {
         this.user = user;
         this.board = board;
