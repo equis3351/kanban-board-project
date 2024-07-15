@@ -5,7 +5,6 @@ import com.sparta.kanbanboardproject.domain.card.service.CardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -52,12 +51,12 @@ public class CardController {
     }
 
     // 카드 작업자별 조회
-    @GetMapping("/cards/boards/{board_id}/workers/{worker_id}")
+    @GetMapping("/cards/boards/{board_id}/workers/{user_id}")
     public ResponseEntity<List<CardResponseDto>> getCardListByWorkerList(
         @PathVariable Long board_id,
-        @PathVariable Long worker_id) {
+        @PathVariable Long user_id) {
 
-        List<CardResponseDto> responseDtoList = cardService.getAllByBoardAndWorker(board_id, worker_id);
+        List<CardResponseDto> responseDtoList = cardService.getAllByBoardAndWorker(board_id, user_id);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDtoList);
     }

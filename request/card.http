@@ -24,7 +24,7 @@ Content-Type: application/json
 Authorization:{{USER_TOKEN}}
 
 {
-  "title": "카드 생성4"
+  "title": "카드 생성2 3"
 }
 
 ###카드 제목 수정
@@ -66,11 +66,11 @@ Authorization:{{USER_TOKEN}}
 Content-Type: application/json
 
 {
-  "userId": 1
+  "userId": 2
 }
 
 ###카드 작업자별 조회
-GET http://localhost:8080/cards/boards/1/workers/1
+GET http://localhost:8080/cards/boards/1/workers/2
 Authorization:{{USER_TOKEN}}
 Content-Type: application/json
 
@@ -80,13 +80,13 @@ Authorization:{{USER_TOKEN}}
 Content-Type: application/json
 
 ###카드 순서 이동
-PUT http://localhost:8080/cards/1/progresses/1/position
+PUT http://localhost:8080/cards/2/progresses/1/position
 Authorization:{{USER_TOKEN}}
 Content-Type: application/json
 
 {
   "newProgressId": 2,
-  "sequenceNum": 3
+  "sequenceNum": 2
 }
 
 ###카드 삭제
