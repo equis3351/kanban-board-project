@@ -2,6 +2,7 @@ package com.sparta.kanbanboardproject.domain.progress.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
+import com.sparta.kanbanboardproject.domain.progress.entity.QProgress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -57,4 +58,13 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
                 .fetchJoin()
                 .fetchOne());
     }
+
+//    @Override
+//    public List<Progress> findByBoardIdOrderBySequenceNumber(Long boardId) {
+//        QProgress progress = QProgress.progress;
+//        return jpaQueryFactory.selectFrom(progress)
+//                .where(progress.board.id.eq(boardId))
+//                .orderBy(progress.sequenceNumber.asc())
+//                .fetch();
+//    }
 }

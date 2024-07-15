@@ -15,4 +15,6 @@ public interface ProgressRepository extends JpaRepository<Progress, Long> {
 
     Optional<Progress> findByBoardIdAndSequenceNumber(Long boardId, Long sequenceNum);
 
+    List<Progress> findByBoardIdOrderBySequenceNumber(Long boardId);
+
 }
