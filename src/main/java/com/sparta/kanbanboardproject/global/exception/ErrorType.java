@@ -28,7 +28,8 @@ public enum ErrorType {
     NOT_FOUND_CARD(HttpStatus.NOT_FOUND, "카드가 존재하지 않습니다."),
     NOT_FOUND_CHANGE_CARD(HttpStatus.NOT_FOUND, "바꾸려는 카드를 찾을 수 없습니다."),
     NOT_FOUND_COLLABORATOR(HttpStatus.NOT_FOUND, "협력자가 아닙니다."),
-    DUPLICATE_CARD_WORKER(HttpStatus.LOCKED, "이미 존재하는 작업자입니다.");
+    DUPLICATE_CARD_WORKER(HttpStatus.LOCKED, "이미 존재하는 작업자입니다."),
+    INVALID_SEQUENCE_NUMBER(HttpStatus.BAD_REQUEST, "올바르지 않는 순서입니다.");
 
     private final HttpStatus httpStatus;
     private final String message;
