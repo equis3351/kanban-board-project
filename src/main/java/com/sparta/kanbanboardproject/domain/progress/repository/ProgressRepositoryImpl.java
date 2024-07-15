@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+import static com.sparta.kanbanboardproject.domain.board.entity.QBoard.board;
 import static com.sparta.kanbanboardproject.domain.progress.entity.QProgress.progress;
 
 
@@ -23,8 +24,8 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
         return jpaQueryFactory
                 .select(progress.id.count())
                 .from(progress)
+                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId))
-                .fetchJoin()
                 .fetchOne();
     }
 
@@ -34,8 +35,8 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
         return jpaQueryFactory
                 .select(progress)
                 .from(progress)
+                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId).and(progress.sequenceNumber.gt(sequenceNum)))
-                .fetchJoin()
                 .fetch();
     }
 
@@ -44,8 +45,8 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
         return jpaQueryFactory
                 .select(progress)
                 .from(progress)
+                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId))
-                .fetchJoin()
                 .fetch();
     }
 
@@ -53,6 +54,7 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
     @Override
     public List<Progress> findByBoardIdOrderBySequenceNumber(Long boardId) {
         return jpaQueryFactory.selectFrom(progress)
+                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId))
                 .orderBy(progress.sequenceNumber.asc())
                 .fetch();
