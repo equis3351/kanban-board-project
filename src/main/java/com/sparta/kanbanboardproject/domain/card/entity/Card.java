@@ -1,9 +1,8 @@
 package com.sparta.kanbanboardproject.domain.card.entity;
 
-import com.sparta.kanbanboardproject.domain.board.entity.Board;
 import com.sparta.kanbanboardproject.domain.comment.entity.Comment;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
-import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
+import com.sparta.kanbanboardproject.domain.user.entity.User;
 import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import jakarta.persistence.*;
 import lombok.Builder;
@@ -36,10 +35,6 @@ public class Card {
     private Long sequenceNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id")
-    private Board board;
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "progress_id")
     private Progress progress;
 
@@ -50,11 +45,10 @@ public class Card {
     private List<Comment> commentList;
 
     @Builder
-    public Card(String title, String content, Date dueDate, Board board, Progress progress) {
+    public Card(String title, String content, Date dueDate, Progress progress) {
         this.title = title;
         this.content = content;
         this.dueDate = dueDate;
-        this.board = board;
         this.progress = progress;
     }
 
@@ -70,17 +64,25 @@ public class Card {
         this.dueDate = dueDate;
     }
 
-    public void addWorker(Card card, Collaborator collaborator) {
-        Worker worker = new Worker(card, collaborator);
+    public void addWorker(Card card, User user) {
+        Worker worker = new Worker(card, user);
         workerList.add(worker);
+    }
+
+    public void updateProgress(Progress progress) {
+        this.progress = progress;
     }
 
     public void updateSequence(Long sequenceNumber) {
         this.sequenceNumber = sequenceNumber;
     }
 
-    public void updateProgress(Progress progress) {
-        this.progress = progress;
+    public void increaseSequence(Long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber + 1;
+    }
+
+    public void decreaseSequence(Long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber - 1;
     }
 
 }

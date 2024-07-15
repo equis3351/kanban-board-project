@@ -21,18 +21,11 @@ public class Worker {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "collaborator_id")
-    private Collaborator collaborator;
+    private User user;
 
-    public Worker(Card card, Collaborator collaborator) {
+    public Worker(Card card, User user) {
         this.card = card;
-        this.collaborator = collaborator;
-    }
-
-    public User getUser() {
-        if (collaborator != null) {
-            return collaborator.getUser();
-        }
-        return null;
+        this.user = user;
     }
 
 }

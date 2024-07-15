@@ -8,9 +8,8 @@ import com.sparta.kanbanboardproject.domain.card.repository.CardRepository;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import com.sparta.kanbanboardproject.domain.progress.repository.ProgressRepository;
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
-import com.sparta.kanbanboardproject.domain.user.entity.Worker;
 import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
-import com.sparta.kanbanboardproject.domain.user.repository.WorkerRepository;
+import com.sparta.kanbanboardproject.domain.user.repository.worker.WorkerRepository;
 import com.sparta.kanbanboardproject.global.exception.CustomException;
 import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
@@ -33,24 +32,48 @@ public class CardService {
     private final WorkerRepository workerRepository;
     private final CollaboratorRepository collaboratorRepository;
 
+    // 카드 생성
+    public CardResponseDto addCard(Long progressId, String title) {
+        Progress progress = getProgressById(progressId);
+
+        Card card = Card.builder()
+            .title(title)
+            .progress(progress)
+            .build();
+
+        Long countCards = cardRepository.countByProgressId(progressId);
+        card.increaseSequence(countCards);
+        cardRepository.save(card);
+
+        return new CardResponseDto(card);
+    }
+
+    // 카드 상세 조회
+    public CardResponseDto getCard(Long cardId) {
+        Card card = getCardById(cardId);
+
+        return new CardResponseDto(card);
+    }
+
     // 카드 목록 조회
     public List<CardResponseDto> getAllByBoard(Long boardId) {
         Board board = getBoardById(boardId);
 
-        return cardRepository.findAllByBoard(board)
-            .stream().map(CardResponseDto::new).toList();
+        return cardRepository.findAll()
+            .stream()
+            .filter(card -> card.getProgress().getBoard().equals(board))
+            .map(CardResponseDto::new)
+            .toList();
     }
 
     // 카드 작업자별 조회
     public List<CardResponseDto> getAllByBoardAndWorker(Long boardId, Long workerId) {
         Board board = getBoardById(boardId);
 
-        List<Worker> workers = workerRepository.findAllById(workerId);
-        return workers.stream()
-            .filter(worker -> worker.getCard().getBoard().equals(board))
-            .map(worker -> {
-                return new CardResponseDto(worker.getCard());
-            })
+        return workerRepository.findAllById(workerId)
+            .stream()
+            .filter(worker -> worker.getCard().getProgress().getBoard().equals(board))
+            .map(worker -> new CardResponseDto(worker.getCard()))
             .distinct()
             .collect(Collectors.toList());
     }
@@ -60,32 +83,17 @@ public class CardService {
         Board board = getBoardById(boardId);
         Progress progress = getProgressById(progressId);
 
-        return cardRepository.findAllByBoardAndProgress(board, progress)
-            .stream().map(CardResponseDto::new).toList();
-    }
-
-    // 카드 생성
-    public CardResponseDto addCard(Long boardId, Long progressId, String title) {
-        Board board = getBoardById(boardId);
-        Progress progress = getProgressById(progressId);
-
-        Card card = Card.builder()
-            .title(title)
-            .board(board)
-            .progress(progress)
-            .build();
-
-        Long countCards = cardRepository.countByProgressId(progressId);
-        card.updateSequence(countCards + 1);
-        cardRepository.save(card);
-
-        return new CardResponseDto(card);
+        return cardRepository.findAllByProgress(progress)
+            .stream()
+            .filter(card -> card.getProgress().getBoard().equals(board))
+            .map(CardResponseDto::new)
+            .toList();
     }
 
     // 카드 제목 수정
     @Transactional
-    public CardResponseDto updateCardTitle(Long boardId, Long progressId, Long cardId, String title) {
-        Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+    public CardResponseDto updateCardTitle(Long cardId, String title) {
+        Card card = getCardById(cardId);
 
         card.updateTitle(title);
 
@@ -94,18 +102,18 @@ public class CardService {
 
     // 카드 내용 수정
     @Transactional
-    public CardResponseDto updateCardContent(Long boardId, Long progressId, Long cardId, String content) {
-        Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+    public CardResponseDto updateCardContent(Long cardId, String content) {
+        Card card = getCardById(cardId);
 
         card.updateContent(content);
 
         return new CardResponseDto(card);
     }
 
-    // 카드 마감일 수정
+    // 카드 마감일자 수정
     @Transactional
-    public CardResponseDto updateCardDueDate(Long boardId, Long progressId, Long cardId, Date dueDate) {
-        Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+    public CardResponseDto updateCardDueDate(Long cardId, Date dueDate) {
+        Card card = getCardById(cardId);
 
         card.updateDueDate(dueDate);
 
@@ -114,8 +122,8 @@ public class CardService {
 
     // 카드 작업자 지정
     @Transactional
-    public CardResponseDto updateCardWorker(Long boardId, Long progressId, Long cardId, Long workerId) {
-        Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+    public CardResponseDto updateCardWorker(Long cardId, Long workerId) {
+        Card card = getCardById(cardId);
         Collaborator collaborator = collaboratorRepository.findById(workerId).orElseThrow(
             () -> new CustomException(ErrorType.NOT_FOUND_COLLABORATOR)
         );
@@ -127,49 +135,34 @@ public class CardService {
             throw new CustomException(ErrorType.DUPLICATE_CARD_WORKER);
         }
 
-        card.addWorker(card, collaborator);
+        card.addWorker(card, collaborator.getUser());
 
         return new CardResponseDto(card);
     }
 
-    // 카드 삭제
-    @Transactional
-    public void deleteCard(Long boardId, Long progressId, Long cardId) {
-        Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
-
-        cardRepository.delete(card);
-
-        List<Card> cardList = cardRepository.findByProgressIdAndSequenceNumberGreaterThan(progressId, card.getSequenceNumber());
-        for (Card cd : cardList) {
-            cd.updateSequence(cd.getSequenceNumber() - 1);
-        }
-        
-        cardRepository.saveAll(cardList);
-    }
-
     // 카드 상태 변경
-    public CardResponseDto updateCardStatus(Long boardId, Long progressId, Long cardId, Long updateProgressId) {
-        Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+    public CardResponseDto updateCardStatus(Long cardId, Long progressId, Long updateProgressId) {
+        Card card = getCardById(cardId);
         Progress progress = getProgressById(updateProgressId);
         
         card.updateProgress(progress);
 
         List<Card> cardList = cardRepository.findByProgressIdAndSequenceNumberGreaterThan(progressId, card.getSequenceNumber());
         for (Card cd : cardList) {
-            cd.updateSequence(cd.getSequenceNumber() - 1);
+            cd.decreaseSequence(cd.getSequenceNumber());
         }
 
         Long countCards = cardRepository.countByProgressId(updateProgressId);
-        card.updateSequence(countCards + 1);
+        card.increaseSequence(countCards);
         cardRepository.save(card);
 
         return new CardResponseDto(card);
     }
 
     // 카드 순서 이동
-    public CardResponseDto moveCard(Long boardId, Long progressId, Long cardId, Long sequenceNum) {
-        Card changedCard = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
-
+    @Transactional
+    public CardResponseDto moveCard(Long cardId, Long progressId, Long sequenceNum) {
+        Card changedCard = getCardById(cardId);
         Long currentSequenceNumber = changedCard.getSequenceNumber();
 
         Card changingCard = cardRepository.findByProgressIdAndSequenceNumber(progressId, sequenceNum).orElseThrow(
@@ -177,19 +170,24 @@ public class CardService {
         );
 
         changingCard.updateSequence(currentSequenceNumber);
-        cardRepository.save(changingCard);
-
         changedCard.updateSequence(sequenceNum);
-        cardRepository.save(changedCard);
 
         return new CardResponseDto(changedCard);
     }
 
-    // 카드 상세 조회
-    public CardResponseDto getCardById(Long boardId, Long progressId, Long cardId) {
-        Card card = getCardByIdAndBoardIdAndProgressId(boardId, progressId, cardId);
+    // 카드 삭제
+    @Transactional
+    public void deleteCard(Long progressId, Long cardId) {
+        Card card = getCardById(cardId);
 
-        return new CardResponseDto(card);
+        cardRepository.delete(card);
+
+        List<Card> cardList = cardRepository.findByProgressIdAndSequenceNumberGreaterThan(progressId, card.getSequenceNumber());
+        for (Card cd : cardList) {
+            cd.decreaseSequence(cd.getSequenceNumber());
+        }
+
+        cardRepository.saveAll(cardList);
     }
 
     // 보드 확인
@@ -207,8 +205,8 @@ public class CardService {
     }
 
     // 카드 확인
-    private Card getCardByIdAndBoardIdAndProgressId(Long boardId, Long progressId, Long cardId) {
-        return cardRepository.findByBoardIdAndProgressIdAndId(boardId, progressId, cardId).orElseThrow(
+    private Card getCardById(Long cardId) {
+        return cardRepository.findById(cardId).orElseThrow(
             () -> new CustomException(ErrorType.NOT_FOUND_CARD)
         );
     }
