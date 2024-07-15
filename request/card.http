@@ -1,0 +1,94 @@
+###일반 유저 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "user1"
+}
+> {% client.global.set("USER_TOKEN", response.headers.valueOf("Authorization"));%}
+
+###매니저 유저 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "username": "managerUser5",
+  "password": "managerUser1"
+}
+> {% client.global.set("USER_TOKEN", response.headers.valueOf("Authorization")); %}
+
+###카드 생성
+POST http://localhost:8080/progresses/2/cards
+Content-Type: application/json
+Authorization:{{USER_TOKEN}}
+
+{
+  "title": "카드 생성4"
+}
+
+###카드 제목 수정
+PUT http://localhost:8080/cards/1/title
+Authorization:{{USER_TOKEN}}
+Content-Type: application/json
+
+{
+  "title" : "카드 제목 수정"
+}
+
+###카드 내용 수정
+PUT http://localhost:8080/cards/1/content
+Authorization:{{USER_TOKEN}}
+Content-Type: application/json
+
+{
+  "content" : "카드 내용 수정"
+}
+
+###카드 마감일자 수정
+PUT http://localhost:8080/cards/1/due-date
+Authorization:{{USER_TOKEN}}
+Content-Type: application/json
+
+"2024-07-15"
+
+###카드 목록 조회
+GET http://localhost:8080/cards/boards/1
+Authorization:{{USER_TOKEN}}
+
+###카드별 조회
+GET http://localhost:8080/cards/1
+Authorization:{{USER_TOKEN}}
+
+###카드 작업자 추가
+PUT http://localhost:8080/cards/2/worker
+Authorization:{{USER_TOKEN}}
+Content-Type: application/json
+
+{
+  "userId": 1
+}
+
+###카드 작업자별 조회
+GET http://localhost:8080/cards/boards/1/workers/1
+Authorization:{{USER_TOKEN}}
+Content-Type: application/json
+
+###카드 상태별 조회
+GET http://localhost:8080/cards/boards/1/progresses/1
+Authorization:{{USER_TOKEN}}
+Content-Type: application/json
+
+###카드 순서 이동
+PUT http://localhost:8080/cards/1/progresses/1/position
+Authorization:{{USER_TOKEN}}
+Content-Type: application/json
+
+{
+  "newProgressId": 2,
+  "sequenceNum": 3
+}
+
+###카드 삭제
+DELETE http://localhost:8080/progresses/1/cards/4
+Authorization:{{USER_TOKEN}}

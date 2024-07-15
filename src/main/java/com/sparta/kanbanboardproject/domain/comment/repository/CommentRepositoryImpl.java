@@ -21,12 +21,10 @@ public class CommentRepositoryImpl implements CustomCommentRepository {
 
     public List<Comment> findAllByCardId(Long cardId, Sort createdAt){
         QComment comment=QComment.comment;
-        QCard card=QCard.card;
 
         return jpaQueryFactory
                 .select(comment)
                 .from(comment)
-                .join(comment.card, card).fetchJoin()
                 .where(comment.card.id.eq(cardId))
                 .fetch();
     }

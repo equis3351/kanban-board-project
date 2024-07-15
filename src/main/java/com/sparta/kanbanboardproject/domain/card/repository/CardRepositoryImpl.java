@@ -23,7 +23,6 @@ public class CardRepositoryImpl implements CustomCardRepository {
         return queryFactory
                 .select(card.count())
                 .from(card)
-                .join(card.progress, QProgress.progress).fetchJoin()
                 .where(card.progress.id.eq(progressId))
                 .fetchOne();
     }
@@ -34,7 +33,6 @@ public class CardRepositoryImpl implements CustomCardRepository {
 
         return queryFactory
                 .selectFrom(card)
-                .join(card.progress, QProgress.progress).fetchJoin()
                 .where(card.progress.eq(progress))
                 .fetch();
     }
@@ -45,7 +43,6 @@ public class CardRepositoryImpl implements CustomCardRepository {
 
         return queryFactory
                 .selectFrom(card)
-                .join(card.progress, QProgress.progress).fetchJoin()
                 .where(card.progress.id.eq(progressId).and(card.sequenceNumber.gt(sequenceNum)))
                 .fetch();
     }
@@ -56,7 +53,6 @@ public class CardRepositoryImpl implements CustomCardRepository {
 
         return queryFactory
                 .selectFrom(card)
-                .join(card.progress, QProgress.progress).fetchJoin()
                 .where(card.progress.id.eq(progressId))
                 .orderBy(card.sequenceNumber.asc())
                 .fetch();

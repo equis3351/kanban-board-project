@@ -5,10 +5,12 @@ import com.sparta.kanbanboardproject.domain.card.service.CardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Slf4j(topic = "CardController")
@@ -97,9 +99,9 @@ public class CardController {
     @PutMapping("/cards/{card_id}/due-date")
     public ResponseEntity<CardResponseDto> updateCardDueDate(
         @PathVariable Long card_id,
-        @Valid @RequestBody CardDueDateRequestDto requestDto) {
+        @RequestBody Date dueDate) {
 
-        CardResponseDto responseDto = cardService.updateCardDueDate(card_id, requestDto.getDueDate());
+        CardResponseDto responseDto = cardService.updateCardDueDate(card_id, dueDate);
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

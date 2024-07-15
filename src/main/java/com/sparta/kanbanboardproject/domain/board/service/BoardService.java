@@ -6,7 +6,7 @@ import com.sparta.kanbanboardproject.domain.board.entity.Board;
 import com.sparta.kanbanboardproject.domain.board.repository.BoardRepository;
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
-import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
+import com.sparta.kanbanboardproject.domain.user.repository.collaborator.CollaboratorRepository;
 import com.sparta.kanbanboardproject.domain.user.repository.UserRepository;
 import com.sparta.kanbanboardproject.global.exception.CustomException;
 import com.sparta.kanbanboardproject.global.exception.ErrorType;
