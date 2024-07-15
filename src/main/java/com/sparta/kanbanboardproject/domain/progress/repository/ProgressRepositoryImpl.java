@@ -14,12 +14,12 @@ import static com.sparta.kanbanboardproject.domain.progress.entity.QProgress.pro
 
 @Repository
 @RequiredArgsConstructor
-public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
+public class ProgressRepositoryImpl implements CustomProgressRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public Long countBoard(Long boardId) {
+    public Long countByBoardId(Long boardId) {
         return jpaQueryFactory
                 .select(progress.id.count())
                 .from(progress)
@@ -30,7 +30,7 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
 
 
     @Override
-    public List<Progress> searchBoardAndSeqGreater(Long boardId, Long sequenceNum) {
+    public List<Progress> findByBoardIdAndSequenceNumberGreaterThan(Long boardId, Long sequenceNum) {
         return jpaQueryFactory
                 .select(progress)
                 .from(progress)
@@ -40,7 +40,7 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
     }
 
     @Override
-    public List<Progress> searchBoard(Long boardId) {
+    public List<Progress> findByBoardId(Long boardId) {
         return jpaQueryFactory
                 .select(progress)
                 .from(progress)
@@ -49,22 +49,12 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
                 .fetch();
     }
 
-    @Override
-    public Optional<Progress> searchBoardAndSeq(Long boardId, Long sequenceNum) {
-        return Optional.ofNullable(jpaQueryFactory
-                .select(progress)
-                .from(progress)
-                .where(progress.board.id.eq(boardId).and(progress.sequenceNumber.eq(sequenceNum)))
-                .fetchJoin()
-                .fetchOne());
-    }
 
-//    @Override
-//    public List<Progress> findByBoardIdOrderBySequenceNumber(Long boardId) {
-//        QProgress progress = QProgress.progress;
-//        return jpaQueryFactory.selectFrom(progress)
-//                .where(progress.board.id.eq(boardId))
-//                .orderBy(progress.sequenceNumber.asc())
-//                .fetch();
-//    }
+    @Override
+    public List<Progress> findByBoardIdOrderBySequenceNumber(Long boardId) {
+        return jpaQueryFactory.selectFrom(progress)
+                .where(progress.board.id.eq(boardId))
+                .orderBy(progress.sequenceNumber.asc())
+                .fetch();
+    }
 }

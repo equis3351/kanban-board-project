@@ -9,12 +9,12 @@ import static com.sparta.kanbanboardproject.domain.user.entity.QCollaborator.col
 
 @Repository
 @RequiredArgsConstructor
-public class CollaboratorRepositoryImpl implements CollaboratorRepositoryQuery {
+public class CollaboratorRepositoryImpl implements CustomCollaboratorRepository {
 
     private final JPAQueryFactory jpaQueryFactory;
 
     @Override
-    public boolean UserCheck(Long invitedUserId) {
+    public boolean existsByUserId(Long invitedUserId) {
         Integer fetchFirst = jpaQueryFactory.selectOne()
                 .from(collaborator)
                 .where(collaborator.user.id.eq(invitedUserId))

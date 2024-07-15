@@ -5,6 +5,6 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 
-public interface CommentRepositoryQuery {
-    List<Comment> searchCardDesc(Long cardId, Sort createdAt);
+public interface CustomCommentRepository {
+    List<Comment> findAllByCardId(Long cardId, Sort createdAt);
 }
