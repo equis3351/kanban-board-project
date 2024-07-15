@@ -123,9 +123,9 @@ public class CardService {
 
     // 카드 작업자 지정
     @Transactional
-    public CardResponseDto updateCardWorker(Long cardId, Long workerId) {
+    public CardResponseDto updateCardWorker(Long cardId, Long userId) {
         Card card = getCardById(cardId);
-        Collaborator collaborator = getCollaboratorById(workerId);
+        Collaborator collaborator = getCollaboratorById(userId);
 
         validateWorker(card, collaborator);
 
@@ -196,8 +196,8 @@ public class CardService {
     }
 
     // 협력자 확인
-    private Collaborator getCollaboratorById(Long workerId) {
-        return collaboratorRepository.findById(workerId).orElseThrow(
+    private Collaborator getCollaboratorById(Long userId) {
+        return collaboratorRepository.findById(userId).orElseThrow(
             () -> new CustomException(ErrorType.NOT_FOUND_COLLABORATOR)
         );
     }
