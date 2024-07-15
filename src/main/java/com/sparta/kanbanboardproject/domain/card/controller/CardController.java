@@ -1,8 +1,6 @@
 package com.sparta.kanbanboardproject.domain.card.controller;
 
-import com.sparta.kanbanboardproject.domain.card.dto.CardPositionRequestDto;
-import com.sparta.kanbanboardproject.domain.card.dto.CardRequestDto;
-import com.sparta.kanbanboardproject.domain.card.dto.CardResponseDto;
+import com.sparta.kanbanboardproject.domain.card.dto.*;
 import com.sparta.kanbanboardproject.domain.card.service.CardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Slf4j(topic = "CardController")
@@ -25,9 +22,9 @@ public class CardController {
     @PostMapping("/progresses/{progress_id}/cards")
     public ResponseEntity<CardResponseDto> addCard(
         @PathVariable Long progress_id,
-        @Valid @RequestBody CardRequestDto<String> requestDto) {
+        @Valid @RequestBody CardTitleRequestDto requestDto) {
 
-        CardResponseDto responseDto = cardService.addCard(progress_id, requestDto.getData());
+        CardResponseDto responseDto = cardService.addCard(progress_id, requestDto.getTitle());
 
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
@@ -78,9 +75,9 @@ public class CardController {
     @PutMapping("/cards/{card_id}/title")
     public ResponseEntity<CardResponseDto> updateCardTitle(
         @PathVariable Long card_id,
-        @Valid @RequestBody CardRequestDto<String> requestDto) {
+        @Valid @RequestBody CardTitleRequestDto requestDto) {
 
-        CardResponseDto responseDto = cardService.updateCardTitle(card_id, requestDto.getData());
+        CardResponseDto responseDto = cardService.updateCardTitle(card_id, requestDto.getTitle());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -89,9 +86,9 @@ public class CardController {
     @PutMapping("/cards/{card_id}/content")
     public ResponseEntity<CardResponseDto> updateCardContent(
         @PathVariable Long card_id,
-        @Valid @RequestBody CardRequestDto<String> requestDto) {
+        @Valid @RequestBody CardContentRequestDto requestDto) {
 
-        CardResponseDto responseDto = cardService.updateCardContent(card_id, requestDto.getData());
+        CardResponseDto responseDto = cardService.updateCardContent(card_id, requestDto.getContent());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -100,9 +97,9 @@ public class CardController {
     @PutMapping("/cards/{card_id}/due-date")
     public ResponseEntity<CardResponseDto> updateCardDueDate(
         @PathVariable Long card_id,
-        @Valid @RequestBody CardRequestDto<Date> requestDto) {
+        @Valid @RequestBody CardDueDateRequestDto requestDto) {
 
-        CardResponseDto responseDto = cardService.updateCardDueDate(card_id, requestDto.getData());
+        CardResponseDto responseDto = cardService.updateCardDueDate(card_id, requestDto.getDueDate());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
@@ -111,9 +108,9 @@ public class CardController {
     @PutMapping("/cards/{card_id}/worker")
     public ResponseEntity<CardResponseDto> updateCardWorker(
         @PathVariable Long card_id,
-        @Valid @RequestBody CardRequestDto<Long> requestDto) {
+        @Valid @RequestBody CardWorkerRequestDto requestDto) {
 
-        CardResponseDto responseDto = cardService.updateCardWorker(card_id, requestDto.getData());
+        CardResponseDto responseDto = cardService.updateCardWorker(card_id, requestDto.getUserId());
 
         return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }

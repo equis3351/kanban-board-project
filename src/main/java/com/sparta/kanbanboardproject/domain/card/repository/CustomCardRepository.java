@@ -4,7 +4,6 @@ import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CustomCardRepository {
 
