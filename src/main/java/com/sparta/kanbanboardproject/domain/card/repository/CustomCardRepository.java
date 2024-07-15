@@ -9,10 +9,7 @@ import java.util.Optional;
 public interface CustomCardRepository {
 
     Long countByProgressId(Long progressId);
-
-    Optional<Card> findByProgressIdAndSequenceNumber(Long progressId, Long sequenceNum);
-
     List<Card> findAllByProgress(Progress progress);
     List<Card> findByProgressIdAndSequenceNumberGreaterThan(Long progressId, Long sequenceNum);
-
+    List<Card> findByProgressIdOrderBySequenceNumber(Long progressId);
 }

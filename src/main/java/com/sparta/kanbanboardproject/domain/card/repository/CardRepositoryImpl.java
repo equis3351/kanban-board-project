@@ -28,18 +28,6 @@ public class CardRepositoryImpl implements CustomCardRepository {
     }
 
     @Override
-    public Optional<Card> findByProgressIdAndSequenceNumber(Long progressId, Long sequenceNum) {
-        QCard card = QCard.card;
-
-        Card foundCard = queryFactory
-                .selectFrom(card)
-                .where(card.progress.id.eq(progressId).and(card.sequenceNumber.eq(sequenceNum)))
-                .fetchOne();
-
-        return Optional.ofNullable(foundCard);
-    }
-
-    @Override
     public List<Card> findAllByProgress(Progress progress) {
         QCard card = QCard.card;
 
@@ -57,5 +45,15 @@ public class CardRepositoryImpl implements CustomCardRepository {
                 .selectFrom(card)
                 .where(card.progress.id.eq(progressId).and(card.sequenceNumber.gt(sequenceNum)))
                 .fetch();
+    }
+
+    @Override
+    public List<Card> findByProgressIdOrderBySequenceNumber(Long progressId) {
+        QCard card = QCard.card;
+
+        return queryFactory.selectFrom(card)
+            .where(card.progress.id.eq(progressId))
+            .orderBy(card.sequenceNumber.asc())
+            .fetch();
     }
 }
