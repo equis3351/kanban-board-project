@@ -45,4 +45,12 @@ public class Progress {
     public void decreaseSequence() {
         this.sequenceNumber -= 1;
     }
+
+    public void decreaseSequence(Long sequenceNumber) {
+        this.sequenceNumber -= 1;
+    }
+
+    public void increaseSequence(Long sequenceNumber) {
+        this.sequenceNumber += 1;
+    }
 }

@@ -4,6 +4,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.card.entity.QCard;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
+import com.sparta.kanbanboardproject.domain.progress.entity.QProgress;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -22,6 +23,7 @@ public class CardRepositoryImpl implements CustomCardRepository {
         return queryFactory
                 .select(card.count())
                 .from(card)
+                .join(card.progress, QProgress.progress).fetchJoin()
                 .where(card.progress.id.eq(progressId))
                 .fetchOne();
     }
@@ -32,6 +34,7 @@ public class CardRepositoryImpl implements CustomCardRepository {
 
         return queryFactory
                 .selectFrom(card)
+                .join(card.progress, QProgress.progress).fetchJoin()
                 .where(card.progress.eq(progress))
                 .fetch();
     }
@@ -42,6 +45,7 @@ public class CardRepositoryImpl implements CustomCardRepository {
 
         return queryFactory
                 .selectFrom(card)
+                .join(card.progress, QProgress.progress).fetchJoin()
                 .where(card.progress.id.eq(progressId).and(card.sequenceNumber.gt(sequenceNum)))
                 .fetch();
     }
@@ -50,9 +54,11 @@ public class CardRepositoryImpl implements CustomCardRepository {
     public List<Card> findByProgressIdOrderBySequenceNumber(Long progressId) {
         QCard card = QCard.card;
 
-        return queryFactory.selectFrom(card)
-            .where(card.progress.id.eq(progressId))
-            .orderBy(card.sequenceNumber.asc())
-            .fetch();
+        return queryFactory
+                .selectFrom(card)
+                .join(card.progress, QProgress.progress).fetchJoin()
+                .where(card.progress.id.eq(progressId))
+                .orderBy(card.sequenceNumber.asc())
+                .fetch();
     }
 }
