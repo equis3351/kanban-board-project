@@ -4,6 +4,7 @@ import com.sparta.kanbanboardproject.domain.board.dto.BoardRequestDto;
 import com.sparta.kanbanboardproject.domain.board.dto.BoardResponseDto;
 import com.sparta.kanbanboardproject.domain.board.service.BoardService;
 import com.sparta.kanbanboardproject.global.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

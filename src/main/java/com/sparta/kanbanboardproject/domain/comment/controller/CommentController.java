@@ -31,10 +31,10 @@ public class CommentController {
                 .body(commentService.addComment(userDetails.getUser(), cardId, requestDto));
     }
 
-    @GetMapping("/cards/comments")
-    public ResponseEntity<List<CommentResponseDto>> getAllComment() {
+    @GetMapping("/cards/{cardId}/comments")
+    public ResponseEntity<List<CommentResponseDto>> getAllComment(@PathVariable Long cardId) {
         return ResponseEntity.status(HttpStatus.OK).
-                body(commentService.getAllComment());
+                body(commentService.getCardComment(cardId));
     }
 
 }
