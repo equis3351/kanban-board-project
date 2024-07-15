@@ -79,6 +79,10 @@ public class Card {
         this.sequenceNumber = sequenceNumber;
     }
 
+    public void increaseSequence(Long sequenceNumber) {
+        this.sequenceNumber = sequenceNumber + 1;
+    }
+
     public void decreaseSequence(Long sequenceNumber) {
         this.sequenceNumber = sequenceNumber - 1;
     }

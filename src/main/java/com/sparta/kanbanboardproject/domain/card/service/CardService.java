@@ -44,7 +44,7 @@ public class CardService {
             .build();
 
         Long countCards = cardRepository.countByProgressId(progressId);
-        card.updateSequence(countCards + 1);
+        card.increaseSequence(countCards);
         cardRepository.save(card);
 
         return new CardResponseDto(card);
@@ -151,7 +151,7 @@ public class CardService {
         }
 
         Long countCards = cardRepository.countByProgressId(updateProgressId);
-        card.updateSequence(countCards + 1);
+        card.increaseSequence(countCards);
         cardRepository.save(card);
 
         return new CardResponseDto(card);
