@@ -79,15 +79,18 @@ public class BoardService {
         Board board = findByIdBoard(boardId);
         checkUserId(user, board);
 
+        //초대된 협력자인지 확인
         if (collaboratorRepository.existsByUserId(invitedUserId)) {
             throw new CustomException(ErrorType.BAD_REQUEST_USER);
         }
+
 
         Collaborator collaborator = new Collaborator(invitedUser, board);
 
         collaboratorRepository.save(collaborator);
 
         return invitedUser.getUsername() + "님 초대 완료";
+
     }
 
     // 유저 아이디 체크

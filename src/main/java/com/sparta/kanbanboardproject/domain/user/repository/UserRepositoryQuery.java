@@ -1,9 +1,9 @@
 package com.sparta.kanbanboardproject.domain.user.repository;
 
-import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
+import com.sparta.kanbanboardproject.domain.user.entity.User;
 
-@RequiredArgsConstructor
-public class UserRepositoryQuery {
-    private final JPAQueryFactory jpaQueryFactory;
+import java.util.Optional;
+
+public interface UserRepositoryQuery {
+    Optional<User> searchUser(String username);
 }
