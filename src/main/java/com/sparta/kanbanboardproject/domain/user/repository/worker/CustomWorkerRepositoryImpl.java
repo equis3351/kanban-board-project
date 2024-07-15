@@ -15,12 +15,12 @@ public class CustomWorkerRepositoryImpl implements CustomWorkerRepository {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public List<Worker> findAllById(Long workerId) {
+    public List<Worker> findByUserId(Long userId) {
         QWorker worker = QWorker.worker;
 
         return queryFactory
                 .selectFrom(worker)
-                .where(worker.id.eq(workerId))
+                .where(worker.user.id.eq(userId))
                 .fetch();
     }
 }

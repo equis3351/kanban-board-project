@@ -24,7 +24,7 @@ Authorization:{{USER_TOKEN}}
 Content-Type: application/json
 
 {
-  "comment": "댓글 1"
+  "comment": "댓글 3"
 }
 
 ###댓글 조회

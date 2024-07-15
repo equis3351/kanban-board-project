@@ -6,6 +6,5 @@ import java.util.List;
 
 public interface CustomWorkerRepository {
 
-    List<Worker> findAllById(Long workerId);
-
+    List<Worker> findByUserId(Long userId);
 }

@@ -24,7 +24,7 @@ Content-Type: application/json
 Authorization:{{USER_TOKEN}}
 
 {
-  "statusName": "진행 라"
+  "statusName": "진행 2"
 }
 
 ###콜럼 삭제(매니저만 가능)
