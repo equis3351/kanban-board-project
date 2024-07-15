@@ -1,0 +1,44 @@
+###일반 유저 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "username": "user1",
+  "password": "user1"
+}
+> {% client.global.set("USER_TOKEN", response.headers.valueOf("Authorization"));%}
+
+###매니저 유저 로그인
+POST http://localhost:8080/users/login
+Content-Type: application/json
+
+{
+  "username": "managerUser5",
+  "password": "managerUser1"
+}
+> {% client.global.set("USER_TOKEN", response.headers.valueOf("Authorization")); %}
+
+###콜럼 생성(매니저만 가능)
+POST http://localhost:8080/boards/1/progresses
+Content-Type: application/json
+Authorization:{{USER_TOKEN}}
+
+{
+  "statusName": "진행 라"
+}
+
+###콜럼 삭제(매니저만 가능)
+DELETE http://localhost:8080/boards/1/progresses/4
+Content-Type: application/json
+Authorization:{{USER_TOKEN}}
+
+<> 2024-07-15T200432.200.txt
+
+###콜럼 이동(매니저만 가능)
+PUT http://localhost:8080/boards/1/progresses/1/sequence
+Content-Type: application/json
+Authorization:{{USER_TOKEN}}
+
+{
+  "sequenceNumber": 3
+}

@@ -24,7 +24,6 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
         return jpaQueryFactory
                 .select(progress.id.count())
                 .from(progress)
-                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId))
                 .fetchOne();
     }
@@ -35,7 +34,6 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
         return jpaQueryFactory
                 .select(progress)
                 .from(progress)
-                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId).and(progress.sequenceNumber.gt(sequenceNum)))
                 .fetch();
     }
@@ -45,7 +43,6 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
         return jpaQueryFactory
                 .select(progress)
                 .from(progress)
-                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId))
                 .fetch();
     }
@@ -54,7 +51,6 @@ public class ProgressRepositoryImpl implements CustomProgressRepository {
     @Override
     public List<Progress> findByBoardIdOrderBySequenceNumber(Long boardId) {
         return jpaQueryFactory.selectFrom(progress)
-                .join(progress.board, board).fetchJoin()
                 .where(progress.board.id.eq(boardId))
                 .orderBy(progress.sequenceNumber.asc())
                 .fetch();

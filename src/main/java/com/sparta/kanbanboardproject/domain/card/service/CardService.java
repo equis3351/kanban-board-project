@@ -9,7 +9,7 @@ import com.sparta.kanbanboardproject.domain.card.repository.CardRepository;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import com.sparta.kanbanboardproject.domain.progress.repository.ProgressRepository;
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
-import com.sparta.kanbanboardproject.domain.user.repository.CollaboratorRepository;
+import com.sparta.kanbanboardproject.domain.user.repository.collaborator.CollaboratorRepository;
 import com.sparta.kanbanboardproject.domain.user.repository.worker.WorkerRepository;
 import com.sparta.kanbanboardproject.global.exception.CustomException;
 import com.sparta.kanbanboardproject.global.exception.ErrorType;
