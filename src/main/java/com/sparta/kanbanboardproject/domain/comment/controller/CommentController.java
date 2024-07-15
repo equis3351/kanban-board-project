@@ -5,6 +5,7 @@ import com.sparta.kanbanboardproject.domain.comment.dto.CommentRequestDto;
 import com.sparta.kanbanboardproject.domain.comment.dto.CommentResponseDto;
 import com.sparta.kanbanboardproject.domain.comment.service.CommentService;
 import com.sparta.kanbanboardproject.global.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> addComment(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long cardId,
-            @RequestBody CommentRequestDto requestDto) {
+            @Valid @RequestBody CommentRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(commentService.addComment(userDetails.getUser(), cardId, requestDto));
     }

@@ -4,6 +4,7 @@ import com.sparta.kanbanboardproject.domain.board.dto.BoardRequestDto;
 import com.sparta.kanbanboardproject.domain.board.dto.BoardResponseDto;
 import com.sparta.kanbanboardproject.domain.board.service.BoardService;
 import com.sparta.kanbanboardproject.global.security.UserDetailsImpl;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class BoardController {
     @PostMapping("/boards")
     public ResponseEntity<BoardResponseDto> addBoard(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @RequestBody BoardRequestDto requestDto) {
+            @Valid @RequestBody BoardRequestDto requestDto) {
 
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(boardService.addBoard(userDetails.getUser(), requestDto));
@@ -48,7 +49,7 @@ public class BoardController {
     public ResponseEntity<BoardResponseDto> updateBoard(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long board_id,
-            @RequestBody BoardRequestDto requestDto) {
+            @Valid @RequestBody BoardRequestDto requestDto) {
 
         return ResponseEntity.status(HttpStatus.OK)
                 .body(boardService.updateBoard(userDetails.getUser(), board_id, requestDto));
