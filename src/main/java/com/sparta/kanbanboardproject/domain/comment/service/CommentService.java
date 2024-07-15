@@ -11,6 +11,7 @@ import com.sparta.kanbanboardproject.global.exception.CustomException;
 import com.sparta.kanbanboardproject.global.exception.ErrorType;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.query.Order;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -37,9 +38,8 @@ public class CommentService {
     }
     
     // 모든 댓글 조회
-    public List<CommentResponseDto> getAllComment() {
-        List<Comment> comment = commentRepository.findAll(Sort.by(Sort.Order.desc("createdAt")));
-
+    public List<CommentResponseDto> getCardComment(Long cardId) {
+        List<Comment> comment = commentRepository.findAllByCardId(cardId,Sort.by(Sort.Order.desc("createdAt")));
         return comment.stream().map(CommentResponseDto::new).toList();
     }
 }

@@ -4,7 +4,6 @@ import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.comment.dto.CommentRequestDto;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,9 +17,8 @@ public class Comment extends Timestamped {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
     @Column(nullable = false, length = 50)
-    private String comment;
+    private String content;//content
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "card_id")
@@ -30,8 +28,9 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "user_id")
     private User user;
 
+
     public Comment(CommentRequestDto commentRequestDto, Card card, User user) {
-        this.comment = commentRequestDto.getComment();
+        this.content = commentRequestDto.getComment();
         this.card = card;
         this.user = user;
     }

@@ -20,9 +20,10 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
     @Override
     public Long countBoard(Long boardId) {
         return jpaQueryFactory
-                .select(progress.count())
+                .select(progress.id.count())
                 .from(progress)
                 .where(progress.board.id.eq(boardId))
+                .fetchJoin()
                 .fetchOne();
     }
 
@@ -33,6 +34,7 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
                 .select(progress)
                 .from(progress)
                 .where(progress.board.id.eq(boardId).and(progress.sequenceNumber.gt(sequenceNum)))
+                .fetchJoin()
                 .fetch();
     }
 
@@ -42,6 +44,7 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
                 .select(progress)
                 .from(progress)
                 .where(progress.board.id.eq(boardId))
+                .fetchJoin()
                 .fetch();
     }
 
@@ -51,6 +54,7 @@ public class ProgressRepositoryImpl implements ProgressRepositoryQuery {
                 .select(progress)
                 .from(progress)
                 .where(progress.board.id.eq(boardId).and(progress.sequenceNumber.eq(sequenceNum)))
+                .fetchJoin()
                 .fetchOne());
     }
 }

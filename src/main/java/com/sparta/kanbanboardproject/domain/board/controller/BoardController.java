@@ -24,24 +24,25 @@ public class BoardController {
     public ResponseEntity<BoardResponseDto> addBoard(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @RequestBody BoardRequestDto requestDto) {
-
+        BoardResponseDto bodyResponseDto = boardService.addBoard(userDetails.getUser(), requestDto);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(boardService.addBoard(userDetails.getUser(), requestDto));
+                .body(bodyResponseDto);
     }
 
     @GetMapping("/boards")
     public ResponseEntity<List<BoardResponseDto>> getAllBoard() {
+        List<BoardResponseDto> bodyResponseDto = boardService.getAllBoard();
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardService.getAllBoard());
+                .body(bodyResponseDto);
     }
 
     @GetMapping("/boards/{board_id}")
     public ResponseEntity<BoardResponseDto> getBoard(
             @PathVariable Long board_id) {
-
+        BoardResponseDto bodyResponseDto=boardService.getBoard(board_id);
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardService.getBoard(board_id));
+                .body(bodyResponseDto);
     }
 
     @PostMapping("/boards/{board_id}")
@@ -49,18 +50,20 @@ public class BoardController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long board_id,
             @RequestBody BoardRequestDto requestDto) {
+        BoardResponseDto bodyResponseDto=boardService.updateBoard(userDetails.getUser(), board_id, requestDto);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardService.updateBoard(userDetails.getUser(), board_id, requestDto));
+                .body(bodyResponseDto);
     }
 
     @DeleteMapping("/boards/{board_id}")
     public ResponseEntity<BoardResponseDto> deleteBoard(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long board_id) {
+        BoardResponseDto bodyResponseDto=boardService.deleteBoard(userDetails.getUser(), board_id);
 
         return ResponseEntity.status(HttpStatus.OK)
-                .body(boardService.deleteBoard(userDetails.getUser(), board_id));
+                .body(bodyResponseDto);
     }
 
     @PostMapping("/boards/{board_id}/invite/{user_id}")
@@ -68,8 +71,10 @@ public class BoardController {
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long user_id,
             @PathVariable Long board_id) {
+        String bodyResponseDto=boardService.inviteCollaborator(userDetails.getUser(), user_id, board_id);
 
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(boardService.inviteCollaborator(userDetails.getUser(), user_id, board_id));
+                .body(bodyResponseDto);
     }
+
 }

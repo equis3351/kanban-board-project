@@ -18,6 +18,7 @@ public class CollaboratorRepositoryImpl implements CollaboratorRepositoryQuery {
         Integer fetchFirst = jpaQueryFactory.selectOne()
                 .from(collaborator)
                 .where(collaborator.user.id.eq(invitedUserId))
+                .fetchJoin()
                 .fetchFirst();
         return fetchFirst != null;
     }
