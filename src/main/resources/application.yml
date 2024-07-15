@@ -21,6 +21,7 @@ spring:
           CharSet: utf-8
           characterEncoding: utf-8
           useUnicode: true
+          generate_statistics: true
     show-sql: true
 
 manager:
