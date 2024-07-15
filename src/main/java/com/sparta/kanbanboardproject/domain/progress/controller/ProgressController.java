@@ -45,7 +45,7 @@ public class ProgressController {
     public ResponseEntity<ProgressResponseDto> moveProgress(
             @PathVariable Long board_id,
             @PathVariable Long progress_id,
-            @RequestBody ProgressMoveRequestDto requestDto,
+            @Valid @RequestBody ProgressMoveRequestDto requestDto,
             @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
         ProgressResponseDto progressResponseDto = progressService.moveProgress(board_id,progress_id,requestDto,userDetails.getUser());

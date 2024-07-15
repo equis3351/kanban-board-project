@@ -26,17 +26,15 @@ public class CommentController {
     public ResponseEntity<CommentResponseDto> addComment(
             @AuthenticationPrincipal UserDetailsImpl userDetails,
             @PathVariable Long cardId,
-            @RequestBody @Valid CommentRequestDto requestDto) {
-        CommentResponseDto responseDto = commentService.addComment(userDetails.getUser(), cardId, requestDto);
+            @Valid @RequestBody CommentRequestDto requestDto) {
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(responseDto);
+                .body(commentService.addComment(userDetails.getUser(), cardId, requestDto));
     }
 
-    @GetMapping("/cards/{cardId}/comments")
-    //한 카드에 대한 댓글만 조회
-    public ResponseEntity<List<CommentResponseDto>> getCardComment(@PathVariable Long cardId) {
-        List<CommentResponseDto> reponseDtoList = commentService.getCardComment(cardId);
-        return ResponseEntity.status(HttpStatus.OK).body(reponseDtoList);
+    @GetMapping("/cards/comments")
+    public ResponseEntity<List<CommentResponseDto>> getAllComment() {
+        return ResponseEntity.status(HttpStatus.OK).
+                body(commentService.getAllComment());
     }
 
 }

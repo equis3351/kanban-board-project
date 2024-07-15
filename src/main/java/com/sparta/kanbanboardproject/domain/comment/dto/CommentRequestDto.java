@@ -5,6 +5,6 @@ import lombok.Getter;
 
 @Getter
 public class CommentRequestDto {
-    @NotBlank
+    @NotBlank(message = "댓글의 내용을 입력해 주세요.")
     private String comment;
 }

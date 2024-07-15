@@ -1,7 +1,6 @@
 package com.sparta.kanbanboardproject.domain.board.entity;
 
 import com.sparta.kanbanboardproject.domain.board.dto.BoardRequestDto;
-import com.sparta.kanbanboardproject.domain.card.entity.Card;
 import com.sparta.kanbanboardproject.domain.progress.entity.Progress;
 import com.sparta.kanbanboardproject.domain.user.entity.Collaborator;
 import com.sparta.kanbanboardproject.domain.user.entity.User;
@@ -36,9 +35,6 @@ public class Board {
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Collaborator> collaboratorList;
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Card> cardList;
 
     public Board(BoardRequestDto requestDto, User user) {
         this.boardName = requestDto.getBoardName();
